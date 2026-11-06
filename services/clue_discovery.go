@@ -51,6 +51,9 @@ type DiscoveryResult struct {
 	AliasCandidates []DiscoveryAliasCandidate `json:"alias_candidates"`
 	Unresolved      []DiscoveryEntity         `json:"unresolved"`
 }
+
+const discoveryAlgorithmVersion = "explicit-references-v2"
+
 type discoveryPayload struct {
 	ID   uint   `json:"id"`
 	Hash string `json:"hash"`
@@ -153,10 +156,11 @@ func discoverySnapshotFor(id uint) (*discoverySnapshot, error) {
 		return nil, err
 	}
 	input, _ := json.Marshal(struct {
+		Version string
 		Request DiscoveryRequest
 		Texts   []catalogText
 		Links   []models.ClueConnection
-	}{s.Request, texts, links})
+	}{discoveryAlgorithmVersion, s.Request, texts, links})
 	s.Hash = fmt.Sprintf("%x", sha256.Sum256(input))
 	return s, nil
 }
@@ -284,6 +288,7 @@ func RunClueDiscovery(payload string) error {
 			if err := tx.Where("source_clue_id IN ? OR target_clue_id IN ?", references, references).Find(&edges).Error; err != nil {
 				return err
 			}
+			sourceWords := discoverySourceWords(snapshot.Source, snapshot.Catalog, references)
 			for _, edge := range edges {
 				for _, target := range []uint{edge.SourceClueID, edge.TargetClueID} {
 					candidate, ok := catalog[target]
@@ -293,7 +298,7 @@ func RunClueDiscovery(payload string) error {
 					if _, exists := suggestions[target]; exists {
 						continue
 					}
-					terms := sharedDiscoveryTerms(snapshot.Source, candidate, snapshot.Catalog, references)
+					terms := sharedDiscoveryTerms(sourceWords, candidate)
 					if len(terms) < 2 {
 						continue
 					}
@@ -314,6 +319,9 @@ func RunClueDiscovery(payload string) error {
 			if err := tx.Clauses(clause.OnConflict{Columns: []clause.Column{{Name: "source_clue_id"}, {Name: "target_clue_id"}}, DoUpdates: clause.AssignmentColumns([]string{"source_hash", "kind", "score", "reason", "evidence", "dismissed"})}).Create(&suggestion).Error; err != nil {
 				return err
 			}
+		}
+		if err := tx.Where("source_clue_id = ? AND source_hash <> ?", job.ID, job.Hash).Delete(&models.ClueSuggestion{}).Error; err != nil {
+			return err
 		}
 		// Only self-defining pairs may become pending aliases, never auto-approved.
 		for _, candidate := range result.AliasCandidates {
@@ -340,9 +348,9 @@ func RunClueDiscovery(payload string) error {
 	}
 	return nil
 }
-func sharedDiscoveryTerms(source, target models.LivingClue, catalog []models.LivingClue, refs []uint) []string {
+func discoverySourceWords(source models.LivingClue, catalog []models.LivingClue, refs []uint) map[string]bool {
 	stop := map[string]bool{}
-	for _, s := range strings.Fields("sobre entre para pelos pelas como uma este esta estes estas esse essa suas seus mais muito pesquisa projeto projetos pessoa pessoas universidade instituicao educacao nome descricao plataforma unisinos sinos digital") {
+	for _, s := range strings.Fields("sobre entre para pelos pelas como uma este esta estes estas esse essa suas seus mais muito pesquisa pesquisas projeto projetos pessoa pessoas universidade instituicao educacao nome descricao plataforma unisinos sinos digital artigo artigos trabalho trabalhos publicado publicada publicacao publicacoes revista periodico periodicos volume numero numeros paginas autores autor autoria coautoria titulo texto textos estudo estudos resultado resultados metodologia metodologias pratica praticas desenvolvimento contexto abordagem discussao objetivo objetivos apresentacao palavras chave fonte atualizado atualizada atualizado curriculo curriculos lattes brasil brasileira brasileiro academia academica academico academicos formacao graduacao grupo grupos internacional internacionais centro centros ensino ciencia cientifico cientifica conhecimento conhecimentos educacional educacionais atuado bolsista bolsa bolsas capes cnpq universidade universidades instituicoes mestrado doutorado doutora doutor professor professora professores especialista atual atualmente aproximada andamento coordenacao campus linha possui atividades atividade experiencia experiencia profissional profissional informacoes informacao http https acesso disponivel dados coletados coletado coletada cadastro") {
 		stop[s] = true
 	}
 	for _, c := range catalog {
@@ -362,6 +370,30 @@ func sharedDiscoveryTerms(source, target models.LivingClue, catalog []models.Liv
 			words[w] = true
 		}
 	}
+	// Remove catalogue-wide boilerplate. Count documents, not repetitions,
+	// and compute once per source, keeping graph expansion bounded.
+	frequency := map[string]int{}
+	for _, clue := range catalog {
+		seen := map[string]bool{}
+		for _, word := range strings.Fields(NormalizeClueName(clue.Name + " " + clue.Description)) {
+			if words[word] {
+				seen[word] = true
+			}
+		}
+		for word := range seen {
+			frequency[word]++
+		}
+	}
+	threshold := max(5, (len(catalog)+4)/5)
+	for word, count := range frequency {
+		if count >= threshold {
+			delete(words, word)
+		}
+	}
+	return words
+}
+
+func sharedDiscoveryTerms(words map[string]bool, target models.LivingClue) []string {
 	common := map[string]bool{}
 	for _, w := range strings.Fields(NormalizeClueName(target.Name + " " + target.Description)) {
 		if words[w] {
