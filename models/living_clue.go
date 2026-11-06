@@ -3,6 +3,8 @@ package models
 import "gorm.io/gorm"
 
 type LivingClue struct {
+	Aliases    []ClueAlias `gorm:"foreignKey:LivingClueID" json:"aliases,omitempty"`
+	AliasNames *[]string   `gorm:"-" json:"-"`
 	DefaultModel
 	DeletedAt            gorm.DeletedAt        `gorm:"index" json:"deleted_at"`
 	Name                 string                `gorm:"size:255;notNull" validate:"required" json:"name"`

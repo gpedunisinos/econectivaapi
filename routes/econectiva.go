@@ -17,6 +17,10 @@ func RegisterEconectivaRoutes(r *gin.RouterGroup) {
 	r.PUT("/living_clues/:id/comments/:comment", controllers.UpdateComment)
 	r.DELETE("/living_clues/:id/comments/:comment", controllers.DeleteComment)
 	r.GET("/living_clues/:id/edits", controllers.ListClueEdits)
+	r.GET("/living_clues/:id/connection_suggestions", controllers.ListClueSuggestions)
+	r.POST("/living_clues/:id/connection_suggestions/refresh", controllers.RefreshClueSuggestions)
+	r.POST("/living_clues/:id/connection_suggestions/:suggestion/dismiss", controllers.DismissClueSuggestion)
+	r.PUT("/living_clues/:id/aliases/:alias", controllers.ReviewClueAlias)
 	r.GET("/living_clues/:id/link_previews", controllers.ListClueLinkPreviews)
 	r.GET("/link_previews", controllers.GetLinkPreview)
 }

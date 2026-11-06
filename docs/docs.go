@@ -1412,6 +1412,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/living_clues/{id}/aliases/{alias}": {
+            "put": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "living_clues"
+                ],
+                "summary": "Approve or reject an extracted alternative name",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Clue ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Alias ID",
+                        "name": "alias",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "status: approved or rejected",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.APIMessage"
+                        }
+                    }
+                }
+            }
+        },
         "/living_clues/{id}/chat/messages": {
             "get": {
                 "security": [
@@ -1735,6 +1781,104 @@ const docTemplate = `{
                             "additionalProperties": {
                                 "type": "boolean"
                             }
+                        }
+                    }
+                }
+            }
+        },
+        "/living_clues/{id}/connection_suggestions": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Lazily schedules background analysis for changed content. Suggestions never create connections. Disallowed, deleted, inactive, self and already connected targets are omitted.",
+                "tags": [
+                    "living_clues"
+                ],
+                "summary": "Suggested connections grounded in explicit names and network evidence",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Clue ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ClueDiscoveryResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/living_clues/{id}/connection_suggestions/refresh": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "living_clues"
+                ],
+                "summary": "Request background reference analysis again",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Clue ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/models.APIMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/living_clues/{id}/connection_suggestions/{suggestion}/dismiss": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": [
+                    "living_clues"
+                ],
+                "summary": "Dismiss a connection suggestion for its current content version",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Clue ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Suggestion ID",
+                        "name": "suggestion",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.APIMessage"
                         }
                     }
                 }
@@ -4118,6 +4262,33 @@ const docTemplate = `{
                 }
             }
         },
+        "controllers.ClueDiscoveryResponse": {
+            "type": "object",
+            "properties": {
+                "aliases": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ClueAlias"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "suggestions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ClueSuggestion"
+                    }
+                },
+                "unresolved": {},
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
         "controllers.MeetingAccessInput": {
             "type": "object",
             "required": [
@@ -4534,6 +4705,29 @@ const docTemplate = `{
                 }
             }
         },
+        "models.ClueAlias": {
+            "type": "object",
+            "properties": {
+                "evidence": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "living_clue_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "origin": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "models.ClueComment": {
             "type": "object",
             "properties": {
@@ -4638,6 +4832,29 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "living_clue_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.ClueSuggestion": {
+            "type": "object",
+            "properties": {
+                "evidence": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "kind": {
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "string"
+                },
+                "target_clue": {
+                    "$ref": "#/definitions/models.LivingClue"
+                },
+                "target_clue_id": {
                     "type": "integer"
                 }
             }
@@ -4829,6 +5046,12 @@ const docTemplate = `{
                 "name"
             ],
             "properties": {
+                "aliases": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ClueAlias"
+                    }
+                },
                 "category": {
                     "$ref": "#/definitions/models.Category"
                 },
@@ -5216,6 +5439,12 @@ const docTemplate = `{
                 "name"
             ],
             "properties": {
+                "alias_names": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "category_id": {
                     "type": "integer"
                 },
@@ -5487,6 +5716,12 @@ const docTemplate = `{
                 "name"
             ],
             "properties": {
+                "alias_names": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "category_id": {
                     "type": "integer"
                 },

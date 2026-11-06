@@ -1,0 +1,19 @@
+# Add this file to the API compose invocation when managing the internal service.
+# No host port and no access to the application database or credentials.
+services:
+  clue-discovery:
+    build: .
+    image: onlife-clue-discovery:local
+    container_name: onlife-clue-discovery
+    restart: unless-stopped
+    cpus: 1
+    mem_limit: 1g
+    memswap_limit: 1g
+    pids_limit: 128
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true

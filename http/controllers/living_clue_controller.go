@@ -174,6 +174,10 @@ func CreateLivingClue(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"message": services.GetErrosMessage(err)})
 		return
 	}
+	if err := services.ValidateClueAliases(input.AliasNames); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
 	if err := services.ValidateQuillDelta(input.DescriptionDelta); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
@@ -189,11 +193,14 @@ func CreateLivingClue(context *gin.Context) {
 	if input.IsActive != nil {
 		isActive = *input.IsActive
 	}
-	livingClue := models.LivingClue{Name: input.Name, CategoryID: input.CategoryID, Description: input.Description, DescriptionDelta: input.DescriptionDelta, Latitude: input.Latitude, Longitude: input.Longitude, ImageURL: input.ImageURL, Metadata: models.JSONMap(input.Metadata), IsActive: isActive}
+	livingClue := models.LivingClue{AliasNames: input.AliasNames, Name: input.Name, CategoryID: input.CategoryID, Description: input.Description, DescriptionDelta: input.DescriptionDelta, Latitude: input.Latitude, Longitude: input.Longitude, ImageURL: input.ImageURL, Metadata: models.JSONMap(input.Metadata), IsActive: isActive}
 	if err := repository.CreateLivingClue(&livingClue, user.ID); err != nil {
 		sentry.CaptureException(err)
 		context.JSON(http.StatusInternalServerError, gin.H{"message": fmt.Sprintf("Erro: %s", err.Error())})
 		return
+	}
+	if err := services.QueueClueDiscovery(livingClue.ID, false); err != nil {
+		sentry.CaptureException(err)
 	}
 	createdLivingClue, err := repository.FindLivingClueByID(fmt.Sprint(livingClue.ID))
 	if err != nil {
@@ -243,6 +250,10 @@ func UpdateLivingClue(context *gin.Context) {
 		context.JSON(http.StatusConflict, gin.H{"message": "Esta pista contém integrações. Atualize a plataforma antes de editar para preservar o documento."})
 		return
 	}
+	if err := services.ValidateClueAliases(input.AliasNames); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
 	if err := services.ValidateQuillDelta(input.DescriptionDelta); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
@@ -266,11 +277,14 @@ func UpdateLivingClue(context *gin.Context) {
 		isActive = *input.IsActive
 	}
 	locationChanged := !sameCoordinate(livingClue.Latitude, input.Latitude) || !sameCoordinate(livingClue.Longitude, input.Longitude)
-	updatedLivingClue := models.LivingClue{Name: input.Name, CategoryID: input.CategoryID, Description: input.Description, DescriptionDelta: input.DescriptionDelta, Latitude: input.Latitude, Longitude: input.Longitude, ImageURL: input.ImageURL, Metadata: models.JSONMap(input.Metadata), IsActive: isActive}
+	updatedLivingClue := models.LivingClue{AliasNames: input.AliasNames, Name: input.Name, CategoryID: input.CategoryID, Description: input.Description, DescriptionDelta: input.DescriptionDelta, Latitude: input.Latitude, Longitude: input.Longitude, ImageURL: input.ImageURL, Metadata: models.JSONMap(input.Metadata), IsActive: isActive}
 	if err = repository.UpdateLivingClueWithEdit(livingClue, &updatedLivingClue, user.ID, locationChanged); err != nil {
 		sentry.CaptureException(err)
 		context.JSON(http.StatusInternalServerError, gin.H{"message": fmt.Sprintf("Erro: %s", err.Error())})
 		return
+	}
+	if err := services.QueueClueDiscovery(livingClue.ID, false); err != nil {
+		sentry.CaptureException(err)
 	}
 	refreshedLivingClue, err := repository.FindLivingClueByID(fmt.Sprint(livingClue.ID))
 	if err != nil {

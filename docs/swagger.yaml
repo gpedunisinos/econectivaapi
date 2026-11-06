@@ -7,6 +7,24 @@ definitions:
     required:
     - message_id
     type: object
+  controllers.ClueDiscoveryResponse:
+    properties:
+      aliases:
+        items:
+          $ref: '#/definitions/models.ClueAlias'
+        type: array
+      message:
+        type: string
+      status:
+        type: string
+      suggestions:
+        items:
+          $ref: '#/definitions/models.ClueSuggestion'
+        type: array
+      unresolved: {}
+      updated_at:
+        type: string
+    type: object
   controllers.MeetingAccessInput:
     properties:
       room:
@@ -284,6 +302,21 @@ definitions:
     - id
     - name
     type: object
+  models.ClueAlias:
+    properties:
+      evidence:
+        type: string
+      id:
+        type: integer
+      living_clue_id:
+        type: integer
+      name:
+        type: string
+      origin:
+        type: string
+      status:
+        type: string
+    type: object
   models.ClueComment:
     properties:
       author:
@@ -353,6 +386,21 @@ definitions:
       id:
         type: integer
       living_clue_id:
+        type: integer
+    type: object
+  models.ClueSuggestion:
+    properties:
+      evidence:
+        type: string
+      id:
+        type: integer
+      kind:
+        type: string
+      reason:
+        type: string
+      target_clue:
+        $ref: '#/definitions/models.LivingClue'
+      target_clue_id:
         type: integer
     type: object
   models.ConnectionType:
@@ -476,6 +524,10 @@ definitions:
     type: object
   models.LivingClue:
     properties:
+      aliases:
+        items:
+          $ref: '#/definitions/models.ClueAlias'
+        type: array
       category:
         $ref: '#/definitions/models.Category'
       category_id:
@@ -736,6 +788,10 @@ definitions:
     type: object
   requests.CreateLivingClueInput:
     properties:
+      alias_names:
+        items:
+          type: string
+        type: array
       category_id:
         type: integer
       description:
@@ -920,6 +976,10 @@ definitions:
     type: object
   requests.UpdateLivingClueInput:
     properties:
+      alias_names:
+        items:
+          type: string
+        type: array
       category_id:
         type: integer
       description:
@@ -2007,6 +2067,35 @@ paths:
       summary: Update a living clue
       tags:
       - living_clues
+  /living_clues/{id}/aliases/{alias}:
+    put:
+      parameters:
+      - description: Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Alias ID
+        in: path
+        name: alias
+        required: true
+        type: integer
+      - description: 'status: approved or rejected'
+        in: body
+        name: input
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Approve or reject an extracted alternative name
+      tags:
+      - living_clues
   /living_clues/{id}/chat/messages:
     delete:
       consumes:
@@ -2216,6 +2305,68 @@ paths:
       summary: Edit only your own message, preserving publication order
       tags:
       - compartilhacoes
+  /living_clues/{id}/connection_suggestions:
+    get:
+      description: Lazily schedules background analysis for changed content. Suggestions
+        never create connections. Disallowed, deleted, inactive, self and already
+        connected targets are omitted.
+      parameters:
+      - description: Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.ClueDiscoveryResponse'
+      security:
+      - Bearer: []
+      summary: Suggested connections grounded in explicit names and network evidence
+      tags:
+      - living_clues
+  /living_clues/{id}/connection_suggestions/{suggestion}/dismiss:
+    post:
+      parameters:
+      - description: Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Suggestion ID
+        in: path
+        name: suggestion
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Dismiss a connection suggestion for its current content version
+      tags:
+      - living_clues
+  /living_clues/{id}/connection_suggestions/refresh:
+    post:
+      parameters:
+      - description: Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Request background reference analysis again
+      tags:
+      - living_clues
   /living_clues/{id}/connections:
     get:
       consumes:

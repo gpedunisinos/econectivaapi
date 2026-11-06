@@ -78,6 +78,9 @@ func migrate(database *gorm.DB) {
 		panic(err)
 	}
 	migrateLivingClueOptionalLocation(database)
+	if err := database.AutoMigrate(&models.ClueAlias{}, &models.ClueDiscoveryState{}, &models.ClueSuggestion{}); err != nil {
+		panic(err)
+	}
 	if os.Getenv("ALLOW_DESTRUCTIVE_LEGACY_MIGRATIONS") == "true" {
 		migrateRetiredGeography(database)
 	}

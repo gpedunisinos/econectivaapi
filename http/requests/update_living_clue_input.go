@@ -1,7 +1,8 @@
 package requests
 
 type UpdateLivingClueInput struct {
-	DescriptionFormatVersion uint `json:"description_format_version"`
+	AliasNames               *[]string `json:"alias_names"`
+	DescriptionFormatVersion uint      `json:"description_format_version"`
 	// Omitted coordinates preserve the location; remove_location explicitly clears both.
 	RemoveLocation   bool                   `json:"remove_location"`
 	Name             string                 `json:"name" binding:"required,max=255"`

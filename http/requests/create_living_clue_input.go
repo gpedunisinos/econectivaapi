@@ -1,6 +1,7 @@
 package requests
 
 type CreateLivingClueInput struct {
+	AliasNames               *[]string              `json:"alias_names"`
 	DescriptionFormatVersion uint                   `json:"description_format_version"`
 	Name                     string                 `json:"name" binding:"required,max=255"`
 	CategoryID               uint                   `json:"category_id" binding:"required,exists=categories.id"`

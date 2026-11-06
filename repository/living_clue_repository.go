@@ -68,7 +68,7 @@ func FindLivingCluesByRadius(search string, categoryID *uint, latitude float64, 
 
 func FindLivingClueByID(ID string) (*models.LivingClue, error) {
 	var livingClue models.LivingClue
-	err := config.DB.Preload("Category").Preload("Files").Preload("EnvironmentalContext").Where("living_clues.id = ?", ID).First(&livingClue).Error
+	err := config.DB.Preload("Aliases", "status = ?", "approved").Preload("Category").Preload("Files").Preload("EnvironmentalContext").Where("living_clues.id = ?", ID).First(&livingClue).Error
 	if err != nil {
 		return nil, err
 	}
@@ -98,6 +98,9 @@ func CreateLivingClue(livingClue *models.LivingClue, creatorIDs ...uint) error {
 		var creatorID uint
 		if len(creatorIDs) > 0 {
 			creatorID = creatorIDs[0]
+		}
+		if err := services.ReplaceClueAliases(tx, livingClue); err != nil {
+			return err
 		}
 		return tx.Create(&models.ClueEdit{LivingClueID: livingClue.ID, UserID: creatorID, EventType: "created", CreatedAt: livingClue.CreatedAt}).Error
 	})
@@ -149,6 +152,10 @@ func UpdateLivingClueWithEdit(clue, updated *models.LivingClue, userID uint, loc
 			}
 		}
 		if err := syncCluePreviewReferences(tx, clue.ID, updated); err != nil {
+			return err
+		}
+		updated.ID = clue.ID
+		if err := services.ReplaceClueAliases(tx, updated); err != nil {
 			return err
 		}
 		return tx.Create(&models.ClueEdit{LivingClueID: clue.ID, UserID: userID, EventType: "updated"}).Error

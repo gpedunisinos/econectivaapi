@@ -7,6 +7,7 @@ import (
 
 	"github.com/OdairPianta/unisinos_usp_api/models"
 	"github.com/OdairPianta/unisinos_usp_api/repository"
+	"github.com/OdairPianta/unisinos_usp_api/services"
 )
 
 func StartClient() {
@@ -44,6 +45,8 @@ func StartClient() {
 
 func ProcessJob(job models.Job) error {
 	switch job.Type {
+	case services.ClueDiscoveryJob:
+		return services.RunClueDiscovery(job.Payload)
 	case "SampleJob":
 		ctx := context.Background()
 		err := RunSampleJob(ctx, job.Payload)
