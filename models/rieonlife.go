@@ -35,6 +35,7 @@ type ClueComment struct {
 }
 
 type ClueEdit struct {
+	EventType    string      `gorm:"size:16;not null;default:updated" json:"event_type"`
 	ID           uint        `gorm:"primaryKey" json:"id"`
 	LivingClueID uint        `gorm:"index;not null" json:"living_clue_id"`
 	UserID       uint        `json:"-"`

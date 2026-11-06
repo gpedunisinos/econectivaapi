@@ -87,12 +87,19 @@ func FindLivingClueReferenceByID(ID string) (*models.LivingClue, error) {
 	return &livingClue, nil
 }
 
-func CreateLivingClue(livingClue *models.LivingClue) error {
+func CreateLivingClue(livingClue *models.LivingClue, creatorIDs ...uint) error {
 	return config.DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(livingClue).Error; err != nil {
 			return err
 		}
-		return syncCluePreviewReferences(tx, livingClue.ID, livingClue)
+		if err := syncCluePreviewReferences(tx, livingClue.ID, livingClue); err != nil {
+			return err
+		}
+		var creatorID uint
+		if len(creatorIDs) > 0 {
+			creatorID = creatorIDs[0]
+		}
+		return tx.Create(&models.ClueEdit{LivingClueID: livingClue.ID, UserID: creatorID, EventType: "created", CreatedAt: livingClue.CreatedAt}).Error
 	})
 }
 func UpdateLivingClue(livingClue *models.LivingClue, updatedLivingClue *models.LivingClue) error {
@@ -144,7 +151,7 @@ func UpdateLivingClueWithEdit(clue, updated *models.LivingClue, userID uint, loc
 		if err := syncCluePreviewReferences(tx, clue.ID, updated); err != nil {
 			return err
 		}
-		return tx.Create(&models.ClueEdit{LivingClueID: clue.ID, UserID: userID}).Error
+		return tx.Create(&models.ClueEdit{LivingClueID: clue.ID, UserID: userID, EventType: "updated"}).Error
 	})
 }
 

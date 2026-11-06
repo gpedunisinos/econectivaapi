@@ -332,7 +332,8 @@ func DeleteComment(c *gin.Context) {
 }
 
 // ListClueEdits godoc
-// @Summary Paginated successful edit events with minimal author identity
+// @Summary Paginated creation and edit events with minimal author identity
+// @Description Includes creation at the original timestamp for legacy clues, with unrecorded authorship explicitly identified.
 // @Tags living_clues
 // @Param id path int true "Clue ID"
 // @Success 200 {array} models.ClueEdit
@@ -346,9 +347,38 @@ func ListClueEdits(c *gin.Context) {
 	limit, offset := page(c)
 	items := []models.ClueEdit{}
 	err := config.DB.Where("living_clue_id = ?", clue.ID).Order("created_at DESC, id DESC").Limit(limit).Offset(offset).Find(&items).Error
+	if err != nil {
+		dbResponse(c, err, items)
+		return
+	}
+	// Legacy clues have no recorded creation event. Expose the known creation
+	// timestamp as the final history item without inventing a creator or writing
+	// inferred audit records into the database.
+	if len(items) < limit {
+		var total, creations int64
+		if err = config.DB.Model(&models.ClueEdit{}).Where("living_clue_id = ?", clue.ID).Count(&total).Error; err != nil {
+			dbResponse(c, err, items)
+			return
+		}
+		if err = config.DB.Model(&models.ClueEdit{}).Where("living_clue_id = ? AND event_type = ?", clue.ID, "created").Count(&creations).Error; err != nil {
+			dbResponse(c, err, items)
+			return
+		}
+		if creations == 0 && int64(offset) <= total {
+			items = append(items, models.ClueEdit{LivingClueID: clue.ID, EventType: "created", CreatedAt: clue.CreatedAt})
+		}
+	}
 	for i := range items {
-		items[i].Author = author(items[i].UserID)
-		items[i].Description = "Pista editada"
+		if items[i].UserID == 0 {
+			items[i].Author = models.Participant{Name: "Autoria não registrada"}
+		} else {
+			items[i].Author = author(items[i].UserID)
+		}
+		if items[i].EventType == "created" {
+			items[i].Description = "Pista criada"
+		} else {
+			items[i].Description = "Pista editada"
+		}
 	}
 	dbResponse(c, err, items)
 }

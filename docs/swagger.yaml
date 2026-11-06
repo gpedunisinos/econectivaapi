@@ -348,6 +348,8 @@ definitions:
         type: string
       description:
         type: string
+      event_type:
+        type: string
       id:
         type: integer
       living_clue_id:
@@ -2246,6 +2248,8 @@ paths:
       - living_clues
   /living_clues/{id}/edits:
     get:
+      description: Includes creation at the original timestamp for legacy clues, with
+        unrecorded authorship explicitly identified.
       parameters:
       - description: Clue ID
         in: path
@@ -2261,7 +2265,7 @@ paths:
             type: array
       security:
       - Bearer: []
-      summary: Paginated successful edit events with minimal author identity
+      summary: Paginated creation and edit events with minimal author identity
       tags:
       - living_clues
   /living_clues/{id}/environmental_context/reprocess:

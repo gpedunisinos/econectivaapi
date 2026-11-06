@@ -1793,10 +1793,11 @@ const docTemplate = `{
                         "Bearer": []
                     }
                 ],
+                "description": "Includes creation at the original timestamp for legacy clues, with unrecorded authorship explicitly identified.",
                 "tags": [
                     "living_clues"
                 ],
-                "summary": "Paginated successful edit events with minimal author identity",
+                "summary": "Paginated creation and edit events with minimal author identity",
                 "parameters": [
                     {
                         "type": "integer",
@@ -4628,6 +4629,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "description": {
+                    "type": "string"
+                },
+                "event_type": {
                     "type": "string"
                 },
                 "id": {

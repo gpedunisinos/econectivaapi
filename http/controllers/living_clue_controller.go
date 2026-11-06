@@ -190,7 +190,7 @@ func CreateLivingClue(context *gin.Context) {
 		isActive = *input.IsActive
 	}
 	livingClue := models.LivingClue{Name: input.Name, CategoryID: input.CategoryID, Description: input.Description, DescriptionDelta: input.DescriptionDelta, Latitude: input.Latitude, Longitude: input.Longitude, ImageURL: input.ImageURL, Metadata: models.JSONMap(input.Metadata), IsActive: isActive}
-	if err := repository.CreateLivingClue(&livingClue); err != nil {
+	if err := repository.CreateLivingClue(&livingClue, user.ID); err != nil {
 		sentry.CaptureException(err)
 		context.JSON(http.StatusInternalServerError, gin.H{"message": fmt.Sprintf("Erro: %s", err.Error())})
 		return

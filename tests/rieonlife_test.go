@@ -99,7 +99,7 @@ func TestRieonlifeAccountAndParticipationFlow(t *testing.T) {
 	delete(body, "latitude")
 	var edits []models.ClueEdit
 	require.NoError(t, json.Unmarshal(request(token, "GET", path+"/edits", nil, 200), &edits))
-	require.Len(t, edits, 3)
+	require.Len(t, edits, 4)
 	require.Equal(t, u.ID, edits[0].Author.ID)
 	// Explorer can participate and bookmark, but cannot author platform content.
 	request(token, "PUT", "/me/preferences", map[string]string{"usage_mode": "explorer"}, 200)
