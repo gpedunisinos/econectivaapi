@@ -1,0 +1,22 @@
+# Limits for coexistence with the API, Geo API, Apache and database.
+services:
+  web:
+    mem_limit: 384m
+    cpus: 0.75
+    logging: &rotation
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+  prosody:
+    mem_limit: 256m
+    cpus: 0.5
+    logging: *rotation
+  jicofo:
+    mem_limit: 512m
+    cpus: 0.75
+    logging: *rotation
+  jvb:
+    mem_limit: 1024m
+    cpus: 1.5
+    logging: *rotation

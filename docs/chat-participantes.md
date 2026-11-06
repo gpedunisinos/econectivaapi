@@ -1,0 +1,15 @@
+# Conversas privadas entre participantes
+
+O piloto de presença agora oferece identificação da nave (primeiro nome reduzido, atividade e região) e **Abrir chat**. Iniciar usa o identificador opaco da presença; o servidor resolve o usuário autenticado e o destinatário. IDs numéricos de usuários não aparecem na cena nem nas respostas. A abertura não envia mensagem automaticamente.
+
+O histórico é persistido em duas tabelas novas: `participant_conversations` (par de contas único) e `participant_messages`. Ambas usam utf8mb4 para emojis. Mensagens são texto simples, sem arquivos, HTML interpretado ou integrações. Limite inicial de 2000 pontos de código por mensagem e 20 envios novos por minuto por conta. `client_id` UUID permite repetir uma tentativa sem duplicar o envio; reutilização com outro texto retorna 409.
+
+As rotas `/api/me/conversations` (GET/POST), `/api/me/conversations/:id/messages` (GET/POST) e `/api/me/conversations/:id/read` (POST) exigem autenticação. A leitura e o envio por UUID da conversa verificam que a conta é um dos dois participantes. Uma terceira conta recebe 404; nenhuma conversa aparece na sua listagem. Explorador e Inventor podem conversar sem ganhar permissões de edição de conteúdo.
+
+`POST /api/me/conversations/:id/report` registra uma denúncia do participante autenticado, com corpo `{ "description": "texto opcional" }` (até 2000 caracteres). `POST /api/me/conversations/:id/block` bloqueia o outro participante; `DELETE` na mesma rota remove o bloqueio. O bloqueio impede envios dos dois lados e a leitura de mensagens pelo participante bloqueado (403). A listagem sinaliza `blocked` e `blocked_by_me`; para a pessoa bloqueada, não mostra prévia nem contagem de mensagens. Denúncias e bloqueios são guardados em tabelas separadas, sem expor o texto da denúncia ao outro participante.
+
+O canal de presença entrega apenas notificação privada com UUID da conversa, dirigida às sessões das duas contas. O texto é buscado na API HTTP privada. Não é difundido para outras naves, enviado ao iframe ou incluído em contexto da Iareté. Escrita de mensagens usa logger SQL silencioso para não registrar o corpo em erros de banco. Não há declaração de criptografia ponta a ponta.
+
+Histórico e lista são paginados em 30 registros. Mensagens não lidas são calculadas por conta e conversa. A leitura avança somente até a mensagem exibida e não produz recibo público. A caixa de entrada sincroniza por notificação, reconexão e consulta periódica de 20s quando a aba está visível; esta última recompõe notificações eventualmente perdidas. Mensagens podem ser enviadas a uma conversa existente mesmo com o destinatário fora do espaço e aparecem no retorno.
+
+Testes em banco isolado cobrem autorização entre três contas, Unicode/emojis, persistência, paginação, leitura, repetição idempotente e limite de envio. O hub verifica entrega da notificação só às duas contas (incluindo várias abas), sem modificar o retrato público. A migração é aditiva; não altera pistas, agentes, arquivos ou histórico de IA.

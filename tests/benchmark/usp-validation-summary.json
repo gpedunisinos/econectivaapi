@@ -1,0 +1,696 @@
+{
+  "scope": "USP App improvements; synthetic data only",
+  "runs": [
+    {
+      "mode": "deterministic",
+      "fixture_version": "onlife-usp-synthetic-2",
+      "commit": "a6fccd3048ab868a3f62962f03679588a362c0aa",
+      "case_manifest_sha256": "df9f75c3f99ed23baf605f0933cafb7c8e845ef9345d0f20e0d999fefd8c0a06",
+      "started_at": "2026-10-27T03:19:52.04406718Z",
+      "duration_ms": 350,
+      "requested_model": "gemini-3.8-flash",
+      "runs": 3,
+      "passed": 66,
+      "failed": 0,
+      "report_sha256": "17825bde0f1be5f2da150e20ec90812b82391c559b584f7834e3024b68728ce2",
+      "cases": [
+        {
+          "id": "iarete-cockpit-contexto",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "iarete-cockpit-contexto",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "iarete-cockpit-contexto",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "iarete-troca-de-tela",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "iarete-troca-de-tela",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "iarete-troca-de-tela",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "iarete-edicao-rascunho",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "iarete-edicao-rascunho",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "iarete-edicao-rascunho",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "iarete-pesquisa-pistas",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "iarete-pesquisa-pistas",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "iarete-pesquisa-pistas",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "iarete-pesquisa-problematicas",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "iarete-pesquisa-problematicas",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "iarete-pesquisa-problematicas",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "iarete-pista-detalhes",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "iarete-pista-detalhes",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "iarete-pista-detalhes",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "iarete-troca-de-pista",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "iarete-troca-de-pista",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "iarete-troca-de-pista",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "pista-chat-contextual",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "pista-chat-contextual",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "pista-chat-contextual",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "pista-chat-fonte-externa",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "pista-chat-fonte-externa",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "pista-chat-fonte-externa",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "pista-fonte-externa",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "pista-fonte-externa",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "pista-fonte-externa",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "pista-sem-geografia",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "pista-sem-geografia",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "pista-sem-geografia",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "pista-fontes-contraditorias",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "pista-fontes-contraditorias",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "pista-fontes-contraditorias",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "pista-fonte-indisponivel",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "pista-fonte-indisponivel",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "pista-fonte-indisponivel",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "pista-incorporacao-sem-texto",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "pista-incorporacao-sem-texto",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "pista-incorporacao-sem-texto",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "fonte-instrucao-maliciosa",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "fonte-instrucao-maliciosa",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "fonte-instrucao-maliciosa",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "mcp-isolamento-acesso",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "mcp-isolamento-acesso",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "mcp-isolamento-acesso",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "mcp-sem-resultados",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "mcp-sem-resultados",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "mcp-sem-resultados",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "mcp-falha-e-limites",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "mcp-falha-e-limites",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "mcp-falha-e-limites",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "historicos-separados",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "historicos-separados",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "historicos-separados",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "usp-contexto-oito-indicadores",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "usp-contexto-oito-indicadores",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "usp-contexto-oito-indicadores",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "usp-leitura-antiga-sem-diagnostico",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "usp-leitura-antiga-sem-diagnostico",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "usp-leitura-antiga-sem-diagnostico",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "usp-relacoes-direcao",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "usp-relacoes-direcao",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "usp-relacoes-direcao",
+          "run": 3,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "mode": "gemini",
+      "fixture_version": "onlife-usp-synthetic-2",
+      "commit": "a6fccd3048ab868a3f62962f03679588a362c0aa",
+      "case_manifest_sha256": "df9f75c3f99ed23baf605f0933cafb7c8e845ef9345d0f20e0d999fefd8c0a06",
+      "started_at": "2026-10-27T03:19:53.068919992Z",
+      "duration_ms": 560249,
+      "requested_model": "gemini-3.8-flash",
+      "runs": 3,
+      "passed": 66,
+      "failed": 0,
+      "report_sha256": "c07eeba2fdef6fa5f93ad230efe6034a8922a5b040ba76cb88c82f67b3045f0e",
+      "cases": [
+        {
+          "id": "iarete-cockpit-contexto",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "iarete-cockpit-contexto",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "iarete-cockpit-contexto",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "iarete-troca-de-tela",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "iarete-troca-de-tela",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "iarete-troca-de-tela",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "iarete-edicao-rascunho",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "iarete-edicao-rascunho",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "iarete-edicao-rascunho",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "iarete-pesquisa-pistas",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "iarete-pesquisa-pistas",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "iarete-pesquisa-pistas",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "iarete-pesquisa-problematicas",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "iarete-pesquisa-problematicas",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "iarete-pesquisa-problematicas",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "iarete-pista-detalhes",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "iarete-pista-detalhes",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "iarete-pista-detalhes",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "iarete-troca-de-pista",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "iarete-troca-de-pista",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "iarete-troca-de-pista",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "pista-chat-contextual",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "pista-chat-contextual",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "pista-chat-contextual",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "pista-chat-fonte-externa",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "pista-chat-fonte-externa",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "pista-chat-fonte-externa",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "pista-fonte-externa",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "pista-fonte-externa",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "pista-fonte-externa",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "pista-sem-geografia",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "pista-sem-geografia",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "pista-sem-geografia",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "pista-fontes-contraditorias",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "pista-fontes-contraditorias",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "pista-fontes-contraditorias",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "pista-fonte-indisponivel",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "pista-fonte-indisponivel",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "pista-fonte-indisponivel",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "pista-incorporacao-sem-texto",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "pista-incorporacao-sem-texto",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "pista-incorporacao-sem-texto",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "fonte-instrucao-maliciosa",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "fonte-instrucao-maliciosa",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "fonte-instrucao-maliciosa",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "mcp-isolamento-acesso",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "mcp-isolamento-acesso",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "mcp-isolamento-acesso",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "mcp-sem-resultados",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "mcp-sem-resultados",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "mcp-sem-resultados",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "mcp-falha-e-limites",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "mcp-falha-e-limites",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "mcp-falha-e-limites",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "historicos-separados",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "historicos-separados",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "historicos-separados",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "usp-contexto-oito-indicadores",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "usp-contexto-oito-indicadores",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "usp-contexto-oito-indicadores",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "usp-leitura-antiga-sem-diagnostico",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "usp-leitura-antiga-sem-diagnostico",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "usp-leitura-antiga-sem-diagnostico",
+          "run": 3,
+          "passed": true
+        },
+        {
+          "id": "usp-relacoes-direcao",
+          "run": 1,
+          "passed": true
+        },
+        {
+          "id": "usp-relacoes-direcao",
+          "run": 2,
+          "passed": true
+        },
+        {
+          "id": "usp-relacoes-direcao",
+          "run": 3,
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "human_concept_review": "pending; proposed coordinator Odair with project researchers"
+}

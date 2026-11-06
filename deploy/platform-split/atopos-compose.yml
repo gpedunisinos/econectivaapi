@@ -1,0 +1,13 @@
+services:
+  api:
+    image: ${API_IMAGE:?A verified API image is required}
+    container_name: AtoposAPI
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8084:8080"
+    volumes:
+      - ./storage:/app/src/unisinos_usp/storage
+      - ./.env:/app/src/unisinos_usp/.env:ro
+      - /var/lib/onlife-place-search:/var/lib/onlife-place-search
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

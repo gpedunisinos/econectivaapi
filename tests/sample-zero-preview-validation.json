@@ -1,0 +1,15 @@
+{
+  "status": "aprovado no escopo descrito",
+  "environment": "isolated loopback preview",
+  "checks": {
+    "create_missing_rejected": true,
+    "create_null_rejected": true,
+    "create_zero_accepted": true,
+    "nonzero_then_zero_persisted": true,
+    "optional_clear_preserved": true,
+    "update_missing_rejected": true,
+    "update_null_rejected": true,
+    "own_fixture_cleanup_404": true
+  },
+  "production_mutated": false
+}

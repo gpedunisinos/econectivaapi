@@ -1,0 +1,26 @@
+{
+  "status": "aprovado",
+  "cases": [
+    {
+      "create_input": null,
+      "create_expected": true,
+      "toggle_true_false": true,
+      "omitted_update_preserved": true
+    },
+    {
+      "create_input": false,
+      "create_expected": false,
+      "toggle_true_false": true,
+      "omitted_update_preserved": true
+    },
+    {
+      "create_input": true,
+      "create_expected": true,
+      "toggle_true_false": true,
+      "omitted_update_preserved": true
+    }
+  ],
+  "cleanup": true,
+  "database": "isolated onlife_validation_preview",
+  "production_changed": false
+}
