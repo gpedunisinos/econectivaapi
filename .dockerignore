@@ -1,0 +1,17 @@
+# Credentials are mounted read-only at runtime, never included in the build.
+.env
+**/.env
+.env.*
+**/.env.*
+!.env.example
+.git
+storage
+**/storage
+**/__pycache__
+*.log
+docs/evidencias
+mysql
+**/mysql
+*.db
+*.sql
+*.sql.gz

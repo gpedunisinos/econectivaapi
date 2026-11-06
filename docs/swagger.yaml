@@ -1,0 +1,3745 @@
+basePath: /api
+definitions:
+  controllers.AISpeechInput:
+    properties:
+      message_id:
+        type: integer
+    required:
+    - message_id
+    type: object
+  controllers.MeetingAccessInput:
+    properties:
+      room:
+        type: string
+    required:
+    - room
+    type: object
+  controllers.ParticipantConversationInput:
+    properties:
+      participant:
+        type: string
+    required:
+    - participant
+    type: object
+  controllers.ParticipantConversationView:
+    properties:
+      activity:
+        type: string
+      blocked:
+        type: boolean
+      blocked_by_me:
+        type: boolean
+      id:
+        type: string
+      name:
+        type: string
+      online:
+        type: boolean
+      preview:
+        type: string
+      unread:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  controllers.ParticipantReadInput:
+    properties:
+      through:
+        type: integer
+    type: object
+  controllers.ParticipantReportInput:
+    properties:
+      description:
+        type: string
+    type: object
+  controllers.ParticipantTextInput:
+    properties:
+      client_id:
+        type: string
+      text:
+        type: string
+    type: object
+  enums.UserProfileEnum:
+    enum:
+    - 10
+    - 40
+    format: int32
+    type: integer
+    x-enum-varnames:
+    - UserProfileEnumUser
+    - UserProfileEnumAdministrator
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.AIMessage:
+    properties:
+      content:
+        type: string
+      context:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      role:
+        type: string
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+      user_id:
+        type: integer
+    required:
+    - content
+    - id
+    - role
+    type: object
+  models.AIRecordReference:
+    properties:
+      id:
+        type: integer
+      kind:
+        type: string
+      name:
+        type: string
+    type: object
+  models.AIScreenContext:
+    properties:
+      draft:
+        additionalProperties: true
+        type: object
+      filled_fields:
+        additionalProperties:
+          type: string
+        type: object
+      goal:
+        type: string
+      notes:
+        items:
+          type: string
+        type: array
+      references:
+        additionalProperties:
+          type: integer
+        type: object
+      route:
+        type: string
+      screen_name:
+        type: string
+      stage:
+        type: string
+      usage_mode:
+        type: string
+      usage_mode_label:
+        type: string
+      version:
+        type: integer
+      visible_fields:
+        items:
+          type: string
+        type: array
+      visible_records:
+        items:
+          $ref: '#/definitions/models.AIRecordReference'
+        type: array
+    type: object
+  models.APIMessage:
+    properties:
+      message:
+        type: string
+    required:
+    - message
+    type: object
+  models.APIStatus:
+    properties:
+      status:
+        type: string
+    required:
+    - status
+    type: object
+  models.APIUrl:
+    properties:
+      url:
+        type: string
+    required:
+    - url
+    type: object
+  models.Category:
+    properties:
+      color_hex:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      icon_code:
+        type: string
+      id:
+        type: integer
+      metadata_tags:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+      updated_at:
+        type: string
+    required:
+    - color_hex
+    - id
+    - metadata_tags
+    - name
+    - type
+    type: object
+  models.ChatMessage:
+    properties:
+      chat_template:
+        $ref: '#/definitions/models.ChatTemplate'
+      chat_template_id:
+        type: integer
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      role:
+        type: string
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+      user_id:
+        type: integer
+    required:
+    - content
+    - id
+    - role
+    type: object
+  models.ChatTemplate:
+    properties:
+      chat_template_files:
+        items:
+          $ref: '#/definitions/models.ChatTemplateFile'
+        type: array
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      system_instruction:
+        type: string
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+      user_id:
+        type: integer
+    required:
+    - id
+    - name
+    - system_instruction
+    type: object
+  models.ChatTemplateFile:
+    properties:
+      chat_template:
+        $ref: '#/definitions/models.ChatTemplate'
+      chat_template_id:
+        type: integer
+      content:
+        type: string
+      created_at:
+        type: string
+      error_message:
+        type: string
+      extracted_content:
+        type: string
+      id:
+        type: integer
+      mime_type:
+        type: string
+      name:
+        type: string
+      original_content:
+        type: string
+      source_type:
+        type: string
+      source_url:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+    required:
+    - id
+    - name
+    type: object
+  models.ClueComment:
+    properties:
+      author:
+        $ref: '#/definitions/models.Participant'
+      content:
+        type: string
+      created_at:
+        type: string
+      edited_at:
+        type: string
+      id:
+        type: integer
+      living_clue_id:
+        type: integer
+      removed_at:
+        type: string
+      reply_to_author:
+        $ref: '#/definitions/models.Participant'
+      reply_to_id:
+        type: integer
+      root_id:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.ClueConnection:
+    properties:
+      connection_type:
+        $ref: '#/definitions/models.ConnectionType'
+      connection_type_id:
+        type: integer
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      evidence:
+        type: string
+      id:
+        type: integer
+      source_clue:
+        $ref: '#/definitions/models.LivingClue'
+      source_clue_id:
+        type: integer
+      strength:
+        type: integer
+      target_clue:
+        $ref: '#/definitions/models.LivingClue'
+      target_clue_id:
+        type: integer
+      updated_at:
+        type: string
+    required:
+    - id
+    type: object
+  models.ClueEdit:
+    properties:
+      author:
+        $ref: '#/definitions/models.Participant'
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      living_clue_id:
+        type: integer
+    type: object
+  models.ConnectionType:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      is_directional:
+        type: boolean
+      name:
+        type: string
+      stroke_style:
+        type: string
+      updated_at:
+        type: string
+    required:
+    - id
+    - name
+    type: object
+  models.EnvironmentalContext:
+    properties:
+      altitude_m:
+        type: number
+      analyzed_at:
+        type: string
+      analyzed_latitude:
+        type: number
+      analyzed_longitude:
+        type: number
+      biome:
+        type: string
+      built_up_percent:
+        type: number
+      created_at:
+        type: string
+      error_message:
+        type: string
+      id:
+        type: integer
+      land_cover:
+        type: string
+      living_clue_id:
+        type: integer
+      population_density_km2:
+        type: number
+      slope_percent:
+        type: number
+      sources:
+        $ref: '#/definitions/models.JSONMap'
+      status:
+        type: string
+      updated_at:
+        type: string
+      vegetation_percent:
+        type: number
+      water_distance_m:
+        type: number
+    required:
+    - id
+    type: object
+  models.File:
+    properties:
+      created_at:
+        type: string
+      extension:
+        type: string
+      id:
+        type: integer
+      living_clue:
+        $ref: '#/definitions/models.LivingClue'
+      living_clue_id:
+        type: integer
+      mime_type:
+        type: string
+      name:
+        type: string
+      path:
+        type: string
+      post_id:
+        type: integer
+      public_url:
+        type: string
+      size:
+        type: integer
+      storage_provider:
+        type: string
+      updated_at:
+        type: string
+    required:
+    - extension
+    - id
+    type: object
+  models.ItemSelect:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - id
+    - name
+    type: object
+  models.JSONMap:
+    additionalProperties: true
+    type: object
+  models.LinkPreview:
+    properties:
+      description:
+        type: string
+      image:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      url:
+        type: string
+    type: object
+  models.LivingClue:
+    properties:
+      category:
+        $ref: '#/definitions/models.Category'
+      category_id:
+        type: integer
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      description_delta:
+        type: string
+      environmental_context:
+        $ref: '#/definitions/models.EnvironmentalContext'
+      files:
+        items:
+          $ref: '#/definitions/models.File'
+        type: array
+      id:
+        type: integer
+      image_url:
+        type: string
+      is_active:
+        type: boolean
+      latitude:
+        type: number
+      longitude:
+        type: number
+      metadata:
+        $ref: '#/definitions/models.JSONMap'
+      name:
+        type: string
+      sensor_readings:
+        items:
+          $ref: '#/definitions/models.SensorReading'
+        type: array
+      updated_at:
+        type: string
+    required:
+    - category_id
+    - id
+    - name
+    type: object
+  models.LivingClueChatMessage:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      living_clue_id:
+        type: integer
+      role:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - content
+    - id
+    - role
+    type: object
+  models.LockerItem:
+    properties:
+      available:
+        type: boolean
+      created_at:
+        type: string
+      entity_id:
+        type: integer
+      entity_type:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      origin:
+        type: string
+    type: object
+  models.Participant:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.SampleDetail:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      sample_string:
+        type: string
+      updated_at:
+        type: string
+    required:
+    - id
+    - sample_string
+    type: object
+  models.SampleItem:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      sample_model_id:
+        type: integer
+      sample_string:
+        type: string
+      updated_at:
+        type: string
+    required:
+    - id
+    - sample_model_id
+    - sample_string
+    type: object
+  models.SampleModel:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      name:
+        type: string
+      order_number:
+        type: integer
+      sample_date:
+        type: string
+      sample_detail:
+        $ref: '#/definitions/models.SampleDetail'
+      sample_detail_id:
+        type: integer
+      sample_double:
+        type: number
+      sample_items:
+        items:
+          $ref: '#/definitions/models.SampleItem'
+        type: array
+      sample_nullable:
+        type: string
+      sample_string:
+        type: string
+      sample_unique:
+        type: string
+      updated_at:
+        type: string
+    required:
+    - id
+    - name
+    - sample_date
+    - sample_detail_id
+    - sample_double
+    - sample_string
+    - sample_unique
+    type: object
+  models.SensorReading:
+    properties:
+      content_type:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      living_clue_id:
+        type: integer
+      payload_raw:
+        type: string
+      updated_at:
+        type: string
+    required:
+    - id
+    type: object
+  models.User:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      email_verified_at:
+        type: string
+      fcm_token:
+        type: string
+      id:
+        type: integer
+      is_apple_auth:
+        type: boolean
+      is_google_auth:
+        type: boolean
+      name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      profile:
+        allOf:
+        - $ref: '#/definitions/enums.UserProfileEnum'
+        description: 10 - Usuário, 40 - Administrador
+      remember_token:
+        type: string
+      reset_password_token:
+        type: string
+      token:
+        type: string
+      updated_at:
+        type: string
+      usage_mode:
+        type: string
+    required:
+    - id
+    - name
+    - password
+    - profile
+    type: object
+  requests.CreateChatTemplateInput:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      system_instruction:
+        type: string
+    required:
+    - name
+    - system_instruction
+    type: object
+  requests.CreateClueConnectionInput:
+    properties:
+      connection_type_id:
+        type: integer
+      evidence:
+        type: string
+      source_clue_id:
+        type: integer
+      strength:
+        type: integer
+      target_clue_id:
+        type: integer
+    required:
+    - connection_type_id
+    - source_clue_id
+    - target_clue_id
+    type: object
+  requests.CreateLivingClueInput:
+    properties:
+      category_id:
+        type: integer
+      description:
+        type: string
+      description_delta:
+        maxLength: 1000000
+        type: string
+      description_format_version:
+        type: integer
+      image_url:
+        maxLength: 255
+        type: string
+      is_active:
+        type: boolean
+      latitude:
+        type: number
+      longitude:
+        type: number
+      metadata:
+        additionalProperties: true
+        type: object
+      name:
+        maxLength: 255
+        type: string
+    required:
+    - category_id
+    - name
+    type: object
+  requests.CreateSampleModelInput:
+    properties:
+      name:
+        type: string
+      sample_date:
+        type: string
+      sample_detail_id:
+        type: integer
+      sample_double:
+        type: number
+      sample_nullable:
+        type: string
+      sample_string:
+        type: string
+      sample_unique:
+        type: string
+    required:
+    - name
+    - sample_date
+    - sample_detail_id
+    - sample_double
+    - sample_string
+    - sample_unique
+    type: object
+  requests.CreateUserInput:
+    properties:
+      email:
+        type: string
+      fcm_token:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      profile:
+        allOf:
+        - $ref: '#/definitions/enums.UserProfileEnum'
+        enum:
+        - 10
+        - 40
+      remember_token:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    - profile
+    type: object
+  requests.ForgotPasswordInput:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  requests.LoginAppleInput:
+    properties:
+      id_token:
+        type: string
+      name:
+        type: string
+    type: object
+  requests.LoginGoogleInput:
+    properties:
+      access_token:
+        type: string
+      id_token:
+        type: string
+    type: object
+  requests.LoginInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  requests.RecoverPasswordInput:
+    properties:
+      password:
+        type: string
+      reset_password_token:
+        type: string
+    required:
+    - password
+    - reset_password_token
+    type: object
+  requests.RegisterInput:
+    properties:
+      email:
+        maxLength: 255
+        type: string
+      name:
+        maxLength: 255
+        minLength: 3
+        type: string
+      password:
+        maxLength: 255
+        minLength: 6
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  requests.SendAIMessageInput:
+    properties:
+      context:
+        maxLength: 20000
+        type: string
+      message:
+        maxLength: 8000
+        type: string
+      screen_context:
+        $ref: '#/definitions/models.AIScreenContext'
+    required:
+    - message
+    type: object
+  requests.SendChatMessageInput:
+    properties:
+      message:
+        type: string
+    required:
+    - message
+    type: object
+  requests.SendLivingClueChatMessageInput:
+    properties:
+      message:
+        maxLength: 8000
+        type: string
+    required:
+    - message
+    type: object
+  requests.UpdateClueConnectionInput:
+    properties:
+      connection_type_id:
+        type: integer
+      evidence:
+        type: string
+      source_clue_id:
+        type: integer
+      strength:
+        type: integer
+      target_clue_id:
+        type: integer
+    required:
+    - connection_type_id
+    - source_clue_id
+    - target_clue_id
+    type: object
+  requests.UpdateLivingClueInput:
+    properties:
+      category_id:
+        type: integer
+      description:
+        type: string
+      description_delta:
+        maxLength: 1000000
+        type: string
+      description_format_version:
+        type: integer
+      image_url:
+        maxLength: 255
+        type: string
+      is_active:
+        type: boolean
+      latitude:
+        type: number
+      longitude:
+        type: number
+      metadata:
+        additionalProperties: true
+        type: object
+      name:
+        maxLength: 255
+        type: string
+      remove_location:
+        description: Omitted coordinates preserve the location; remove_location explicitly
+          clears both.
+        type: boolean
+    required:
+    - category_id
+    - name
+    type: object
+  requests.UpdateSampleModelInput:
+    properties:
+      name:
+        type: string
+      order_number:
+        type: integer
+      sample_date:
+        type: string
+      sample_detail_id:
+        type: integer
+      sample_double:
+        type: number
+      sample_nullable:
+        type: string
+      sample_string:
+        type: string
+      sample_unique:
+        type: string
+    required:
+    - name
+    - order_number
+    - sample_date
+    - sample_detail_id
+    - sample_double
+    - sample_string
+    - sample_unique
+    type: object
+  requests.UpdateUserFcmTokenInput:
+    properties:
+      fcm_token:
+        type: string
+    required:
+    - fcm_token
+    type: object
+  requests.UpdateUserInput:
+    properties:
+      email:
+        type: string
+      fcm_token:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      profile:
+        allOf:
+        - $ref: '#/definitions/enums.UserProfileEnum'
+        enum:
+        - 10
+        - 40
+      remember_token:
+        type: string
+      reset_password_token:
+        type: string
+    required:
+    - email
+    - name
+    - profile
+    type: object
+  services.EnvironmentalLayer:
+    properties:
+      attribution:
+        type: string
+      available:
+        type: boolean
+      data_type:
+        type: string
+      default_opacity:
+        type: number
+      description:
+        type: string
+      id:
+        type: string
+      legend:
+        items:
+          additionalProperties: true
+          type: object
+        type: array
+      map_role:
+        type: string
+      max_zoom:
+        type: integer
+      min_zoom:
+        type: integer
+      name:
+        type: string
+      source:
+        additionalProperties: true
+        type: object
+      tile_format:
+        type: string
+      tile_url:
+        type: string
+    type: object
+  services.MeetingAccess:
+    properties:
+      expires_at:
+        type: integer
+      jwt:
+        type: string
+      public_url:
+        type: string
+      room:
+        type: string
+    type: object
+  services.ParticipantMessagePage:
+    properties:
+      has_more:
+        type: boolean
+      messages:
+        items:
+          $ref: '#/definitions/services.ParticipantMessageView'
+        type: array
+    type: object
+  services.ParticipantMessageView:
+    properties:
+      conversation_id:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      own:
+        type: boolean
+      text:
+        type: string
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: api.uniusp.gpedu.com.br
+info:
+  contact:
+    email: contact@spotec.app
+    name: API Support
+    url: https://spotec.app/contato/
+  description: API da plataforma Educação Onlife
+  title: Educação Onlife
+  version: 0.7.4
+paths:
+  /ai/messages:
+    get:
+      consumes:
+      - application/json
+      description: Get authenticated user AI chat history
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.AIMessage'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Get AI messages
+      tags:
+      - ai_messages
+    post:
+      consumes:
+      - application/json
+      description: Conversa global com contexto estruturado atual, consultas MCP autorizadas
+        e histórico próprio por usuário. O contexto do cliente nunca concede autorização.
+      parameters:
+      - description: AI message
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/requests.SendAIMessageInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.AIMessage'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Send AI message
+      tags:
+      - ai_messages
+  /ai/voice/speech:
+    post:
+      consumes:
+      - application/json
+      description: Sintetiza somente uma mensagem assistant do próprio usuário. Voz
+        gerada por IA; áudio não é armazenado. A falha de voz não altera o histórico
+        de texto.
+      parameters:
+      - description: Mensagem da IAraeté
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.AISpeechInput'
+      produces:
+      - audio/wav
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Ouvir uma resposta da IAraeté
+      tags:
+      - ai_messages
+  /ai/voice/transcriptions:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Recebe WAV PCM16 mono 16kHz entre 0,5 e 120 segundos. Processa
+        em memória e descarta o áudio. Não salva mensagens; a transcrição segue pelo
+        endpoint normal de conversa.
+      parameters:
+      - description: Gravação WAV
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Transcrever gravação da conversa com a IAraeté
+      tags:
+      - ai_messages
+  /chat_templates:
+    get:
+      consumes:
+      - application/json
+      description: Get all chat templates available to authenticated users
+      parameters:
+      - description: Search agent name or description
+        in: query
+        name: search
+        type: string
+      - default: 50
+        description: Page size (maximum 200)
+        in: query
+        name: limit
+        type: integer
+      - default: 0
+        description: Pagination offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ChatTemplate'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Get chat templates
+      tags:
+      - chat_templates
+    post:
+      consumes:
+      - application/json
+      description: Create chat template with embedded context files
+      parameters:
+      - description: Chat template
+        in: body
+        name: chat_template
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateChatTemplateInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ChatTemplate'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Create chat template
+      tags:
+      - chat_templates
+  /chat_templates/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete chat template (owner or administrator)
+      parameters:
+      - description: ChatTemplate ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Delete chat template
+      tags:
+      - chat_templates
+    get:
+      description: Get an existing agent available to the authenticated user, including
+        agents linked to clues.
+      parameters:
+      - description: Agent ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ChatTemplate'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Get a registered agent by ID
+      tags:
+      - chat_templates
+    put:
+      consumes:
+      - application/json
+      description: Update chat template and replace embedded context files (owner
+        or administrator)
+      parameters:
+      - description: ChatTemplate ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Chat template
+        in: body
+        name: chat_template
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateChatTemplateInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ChatTemplate'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Update chat template
+      tags:
+      - chat_templates
+  /chat_templates/{id}/messages:
+    delete:
+      consumes:
+      - application/json
+      description: Delete authenticated user chat history by template, allowing access
+        to any existing template
+      parameters:
+      - description: ChatTemplate ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Delete chat messages
+      tags:
+      - chat_messages
+    get:
+      consumes:
+      - application/json
+      description: Get authenticated user chat history by template, allowing access
+        to any existing template
+      parameters:
+      - description: ChatTemplate ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ChatMessage'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Get chat messages
+      tags:
+      - chat_messages
+    post:
+      consumes:
+      - application/json
+      description: Send chat message using a template and persist user and assistant
+        messages
+      parameters:
+      - description: ChatTemplate ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Message
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/requests.SendChatMessageInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ChatMessage'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Send chat message
+      tags:
+      - chat_messages
+  /clue_connections:
+    post:
+      consumes:
+      - application/json
+      description: Omitted strength defaults to1; explicit zero is preserved.
+      parameters:
+      - description: Connection
+        in: body
+        name: connection
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateClueConnectionInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ClueConnection'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Create a clue connection
+      tags:
+      - clue_connections
+  /clue_connections/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Explicit zero strength and empty evidence are saved. Omitted/null
+        strength or evidence preserve existing values.
+      parameters:
+      - description: Connection ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Connection
+        in: body
+        name: connection
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateClueConnectionInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ClueConnection'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Update a clue connection
+      tags:
+      - clue_connections
+  /environmental_layers:
+    get:
+      description: Returns available environmental layers, styles, sources and legends
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/services.EnvironmentalLayer'
+            type: array
+      summary: List environmental map layers
+      tags:
+      - environmental layers
+  /environmental_tiles/{layer}/{z}/{x}/{y}.jpg:
+    get:
+      description: Proxies an authenticated PNG tile from the Geo API
+      parameters:
+      - description: Layer identifier
+        in: path
+        name: layer
+        required: true
+        type: string
+      - description: Zoom
+        in: path
+        name: z
+        required: true
+        type: integer
+      - description: Tile X
+        in: path
+        name: x
+        required: true
+        type: integer
+      - description: Tile Y
+        in: path
+        name: "y"
+        required: true
+        type: integer
+      produces:
+      - image/png
+      - image/jpeg
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      summary: Get an environmental map tile
+      tags:
+      - environmental layers
+  /environmental_tiles/{layer}/{z}/{x}/{y}.png:
+    get:
+      description: Proxies an authenticated PNG tile from the Geo API
+      parameters:
+      - description: Layer identifier
+        in: path
+        name: layer
+        required: true
+        type: string
+      - description: Zoom
+        in: path
+        name: z
+        required: true
+        type: integer
+      - description: Tile X
+        in: path
+        name: x
+        required: true
+        type: integer
+      - description: Tile Y
+        in: path
+        name: "y"
+        required: true
+        type: integer
+      produces:
+      - image/png
+      - image/jpeg
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      summary: Get an environmental map tile
+      tags:
+      - environmental layers
+  /files:
+    get:
+      description: Lists attachments, optionally scoped to one living clue. S3 download
+        URLs are issued separately.
+      parameters:
+      - description: Living clue ID
+        in: query
+        name: living_clue_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.File'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: List attachments
+      tags:
+      - files
+    post:
+      consumes:
+      - multipart/form-data
+      - application/json
+      description: Multipart field file (up to 25 MB), or JSON base_64 for legacy
+        clients, or public_url for an external link. New binary uploads use private
+        S3 when STORAGE_DRIVER=s3.
+      parameters:
+      - description: Attachment, max 25 MB
+        in: formData
+        name: file
+        type: file
+      - description: Original filename
+        in: formData
+        name: name
+        type: string
+      - description: File extension
+        in: formData
+        name: extension
+        type: string
+      - description: Living clue ID
+        in: formData
+        name: living_clue_id
+        type: integer
+      - description: External HTTPS URL
+        in: formData
+        name: public_url
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.File'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "413":
+          description: Request Entity Too Large
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Upload an attachment or save an external link
+      tags:
+      - files
+  /files/{id}:
+    delete:
+      description: Removes a linked attachment. S3 versioning retains recoverable
+        previous versions. External links never delete local files.
+      parameters:
+      - description: File ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.File'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Remove an attachment
+      tags:
+      - files
+  /files/{id}/access:
+    get:
+      description: Requires a platform session. S3 links expire after five minutes
+        and must not be persisted. Existing local files and external links remain
+        supported.
+      parameters:
+      - description: File ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Get temporary attachment download access
+      tags:
+      - files
+  /forgot_password:
+    post:
+      consumes:
+      - application/json
+      description: Forgot password by json user
+      parameters:
+      - description: Forgot password
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/requests.ForgotPasswordInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      summary: Forgot password
+      tags:
+      - users
+  /link_previews:
+    get:
+      parameters:
+      - description: Public HTTP(S) URL
+        in: query
+        name: url
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.LinkPreview'
+      security:
+      - Bearer: []
+      summary: Fetch cached public-page metadata without changing the author document
+      tags:
+      - living_clues
+  /living_clues:
+    get:
+      consumes:
+      - application/json
+      description: Get living clues with optional search, pagination and geospatial
+        filters
+      parameters:
+      - description: Search
+        in: query
+        name: search
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      - description: Category ID
+        in: query
+        name: category_id
+        type: integer
+      - description: North boundary
+        in: query
+        name: north
+        type: number
+      - description: South boundary
+        in: query
+        name: south
+        type: number
+      - description: East boundary
+        in: query
+        name: east
+        type: number
+      - description: West boundary
+        in: query
+        name: west
+        type: number
+      - description: Latitude
+        in: query
+        name: lat
+        type: number
+      - description: Longitude
+        in: query
+        name: lng
+        type: number
+      - description: Radius in meters
+        in: query
+        name: radius
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.LivingClue'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Get living clues
+      tags:
+      - living_clues
+    post:
+      consumes:
+      - application/json
+      description: Create a living clue with an optional coordinate pair (null/null
+        or valid numbers, including zero). Supports text and explicit YouTube video
+        Delta blocks.
+      parameters:
+      - description: Living Clue
+        in: body
+        name: living_clue
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateLivingClueInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.LivingClue'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Add a living clue
+      tags:
+      - living_clues
+  /living_clues/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a living clue by id
+      parameters:
+      - description: Living Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.LivingClue'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Delete a living clue
+      tags:
+      - living_clues
+    get:
+      consumes:
+      - application/json
+      description: Get a living clue by id including the last 10 sensor readings
+      parameters:
+      - description: Living Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.LivingClue'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Get living clue
+      tags:
+      - living_clues
+    put:
+      consumes:
+      - application/json
+      description: Update a living clue. Coordinates are an optional pair; omission
+        preserves location, remove_location=true clears it. Zero is valid. description
+        is derived from a supplied description_delta.
+      parameters:
+      - description: Living Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Living Clue
+        in: body
+        name: living_clue
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateLivingClueInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.LivingClue'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Update a living clue
+      tags:
+      - living_clues
+  /living_clues/{id}/chat/messages:
+    delete:
+      consumes:
+      - application/json
+      description: Delete authenticated user chat history for a living clue
+      parameters:
+      - description: Living Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Delete living clue chat messages
+      tags:
+      - living_clue_chat
+    get:
+      consumes:
+      - application/json
+      description: Get authenticated user chat history for a living clue
+      parameters:
+      - description: Living Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.LivingClueChatMessage'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Get living clue chat messages
+      tags:
+      - living_clue_chat
+    post:
+      consumes:
+      - application/json
+      description: Send a message to a living clue chat, injecting living clue data,
+        recent readings and chat history into the LLM context
+      parameters:
+      - description: Living Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Living clue chat message
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/requests.SendLivingClueChatMessageInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.LivingClueChatMessage'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Send living clue chat message
+      tags:
+      - living_clue_chat
+  /living_clues/{id}/comments:
+    get:
+      parameters:
+      - description: Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Thread ID; omit for roots
+        in: query
+        name: root_id
+        type: integer
+      - description: Page size (1-100)
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ClueComment'
+            type: array
+      security:
+      - Bearer: []
+      summary: Paginated roots (newest first) or replies (oldest first) in a clue
+      tags:
+      - compartilhacoes
+    post:
+      parameters:
+      - description: Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: content and optional reply_to_id
+        in: body
+        name: input
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ClueComment'
+      security:
+      - Bearer: []
+      summary: Publish text or emoji; replies always belong to one root thread
+      tags:
+      - compartilhacoes
+  /living_clues/{id}/comments/{comment}:
+    delete:
+      parameters:
+      - description: Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Comment ID
+        in: path
+        name: comment
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - Bearer: []
+      summary: Replace own message with a tombstone, preserving replies
+      tags:
+      - compartilhacoes
+    put:
+      parameters:
+      - description: Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Comment ID
+        in: path
+        name: comment
+        required: true
+        type: integer
+      - description: content
+        in: body
+        name: input
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ClueComment'
+      security:
+      - Bearer: []
+      summary: Edit only your own message, preserving publication order
+      tags:
+      - compartilhacoes
+  /living_clues/{id}/connections:
+    get:
+      consumes:
+      - application/json
+      description: Get incoming and outgoing connections of a living clue, including
+        related clues and connection types
+      parameters:
+      - description: Living clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ClueConnection'
+            type: array
+        "404":
+          description: Living clue not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Get the connections of a living clue
+      tags:
+      - living_clues
+  /living_clues/{id}/edits:
+    get:
+      parameters:
+      - description: Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ClueEdit'
+            type: array
+      security:
+      - Bearer: []
+      summary: Paginated successful edit events with minimal author identity
+      tags:
+      - living_clues
+  /living_clues/{id}/environmental_context/reprocess:
+    post:
+      description: Queue a new environmental analysis for a living clue
+      parameters:
+      - description: Living Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/models.EnvironmentalContext'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Reprocess living clue environmental context
+      tags:
+      - living_clues
+  /living_clues/{id}/link_previews:
+    get:
+      parameters:
+      - description: Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.LinkPreview'
+            type: array
+      security:
+      - Bearer: []
+      summary: Cached previews associated with the current clue document, separate
+        from its author content
+      tags:
+      - living_clues
+  /living_clues/{id}/sensor_readings:
+    post:
+      consumes:
+      - application/json
+      - text/plain
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      description: Create a public sensor reading linked to a living clue using any
+        payload format
+      parameters:
+      - description: Living Clue ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Raw payload
+        in: body
+        name: payload
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.SensorReading'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      summary: Create sensor reading
+      tags:
+      - sensor_readings
+  /living_clues_select:
+    get:
+      consumes:
+      - application/json
+      description: Select living clues for dropdowns
+      parameters:
+      - description: Search
+        in: query
+        name: search
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      - description: Category ID
+        in: query
+        name: category_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ItemSelect'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Select living clues
+      tags:
+      - living_clues
+  /log/{access_hash}:
+    get:
+      description: Returns a paginated tail of the persisted application log for a
+        date. Requires API_LOG_ACCESS_TOKEN configured on the server; disabled when
+        unset.
+      parameters:
+      - description: Access hash
+        in: path
+        name: access_hash
+        required: true
+        type: string
+      - description: Log date (YYYY-MM-DD)
+        in: query
+        name: date
+        type: string
+      - default: 200
+        description: Number of lines returned
+        in: query
+        maximum: 1000
+        minimum: 1
+        name: limit
+        type: integer
+      - default: 0
+        description: Line offset from the most recent chunk
+        in: query
+        minimum: 0
+        name: offset
+        type: integer
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Plain text log chunk
+          schema:
+            type: string
+        "404":
+          description: Not Found or log file not found
+          schema:
+            type: string
+        "422":
+          description: Invalid date, limit or offset.
+          schema:
+            type: string
+      summary: Get persisted application log
+      tags:
+      - log
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login by json user
+      parameters:
+      - description: Add user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/requests.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      summary: Login an user
+      tags:
+      - users
+  /login/apple:
+    post:
+      consumes:
+      - application/json
+      description: Login an user using apple token
+      parameters:
+      - description: Login with apple token
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/requests.LoginAppleInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      summary: Login an user using apple token
+      tags:
+      - users
+  /login/google:
+    post:
+      consumes:
+      - application/json
+      description: Login by Google id_token or access_token
+      parameters:
+      - description: Google id/access token
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/requests.LoginGoogleInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      summary: Login with Google
+      tags:
+      - users
+  /mcp/iarete:
+    post:
+      consumes:
+      - application/json
+      description: Streamable HTTP autenticado, com sete ferramentas somente leitura.
+        A identidade é obtida da sessão; nenhum argumento de ferramenta concede permissões.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Consultas MCP da IAraeté
+      tags:
+      - ai_messages
+  /me/contributions:
+    get:
+      parameters:
+      - description: Page size (maximum 50)
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              additionalProperties: true
+              type: object
+            type: array
+      security:
+      - Bearer: []
+      summary: List clues edited by the authenticated account from recorded edit history
+      tags:
+      - preferences
+  /me/conversations:
+    get:
+      parameters:
+      - default: 0
+        description: Deslocamento
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Conversas privadas da conta autenticada
+      tags:
+      - participant_chat
+    post:
+      consumes:
+      - application/json
+      description: Usa somente o identificador opaco da presença. Identidade do remetente
+        vem da sessão. Reutiliza a conversa privada entre as duas contas.
+      parameters:
+      - description: Participante
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.ParticipantConversationInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.ParticipantConversationView'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Conectar conversa a um participante do espaço
+      tags:
+      - participant_chat
+  /me/conversations/{id}/block:
+    delete:
+      parameters:
+      - description: Conversa
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Desbloquear o outro participante da conversa
+      tags:
+      - participant_chat
+    post:
+      parameters:
+      - description: Conversa
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Bloquear o outro participante da conversa
+      tags:
+      - participant_chat
+  /me/conversations/{id}/messages:
+    get:
+      parameters:
+      - description: Conversa
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Mensagens anteriores ao ID
+        in: query
+        name: before
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.ParticipantMessagePage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Ler texto e emojis de uma conversa privada
+      tags:
+      - participant_chat
+    post:
+      consumes:
+      - application/json
+      description: Até 2000 caracteres; client_id UUID evita duplicação em novas tentativas.
+        Nenhum conteúdo é enviado à cena espacial ou à IAraeté.
+      parameters:
+      - description: Conversa
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Mensagem
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.ParticipantTextInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.ParticipantMessageView'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Enviar texto e emojis a outro participante
+      tags:
+      - participant_chat
+  /me/conversations/{id}/read:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Conversa
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Última mensagem exibida
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.ParticipantReadInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Atualizar leitura privada da conversa
+      tags:
+      - participant_chat
+  /me/conversations/{id}/report:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Conversa
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Descrição opcional
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.ParticipantReportInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Denunciar uma conversa privada
+      tags:
+      - participant_chat
+  /me/locker:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.LockerItem'
+            type: array
+      security:
+      - Bearer: []
+      summary: List personal saved references, newest first; unavailable targets disclose
+        no content
+      tags:
+      - locker
+  /me/locker/{type}/{entity}:
+    delete:
+      parameters:
+      - description: Entity type
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: Entity ID
+        in: path
+        name: entity
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - Bearer: []
+      summary: Remove only the authenticated account's saved reference
+      tags:
+      - locker
+    put:
+      parameters:
+      - description: living_clue, node or agent
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: Entity ID
+        in: path
+        name: entity
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.LockerItem'
+      security:
+      - Bearer: []
+      summary: Idempotently save a personal reference
+      tags:
+      - locker
+  /me/meetings/access:
+    post:
+      consumes:
+      - application/json
+      description: Qualquer conta autenticada, em ambos os modos, recebe autorização
+        para uma sala por dez minutos. Identidade vem da sessão. Convites públicos
+        não incluem este token.
+      parameters:
+      - description: Nome da sala
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.MeetingAccessInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.MeetingAccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Autorizar entrada em encontro sem segundo login
+      tags:
+      - meetings
+  /me/preferences:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - Bearer: []
+      summary: Read the authenticated account preference
+      tags:
+      - preferences
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 'usage_mode: explorer or inventor'
+        in: body
+        name: input
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Choose explorer or inventor for the authenticated account
+      tags:
+      - preferences
+  /places/search:
+    get:
+      parameters:
+      - description: Place name (3–200 characters)
+        in: query
+        name: q
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: object
+            type: array
+        "429":
+          description: Too Many Requests
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Search worldwide places
+      tags:
+      - Places
+  /presence:
+    get:
+      description: 'Upgrade com origem autorizada e sem token na URL. Primeiro frame
+        JSON auth com token da sessão, em até 5 segundos. Após autenticar: snapshot,
+        updates versionados e alive. Frames state/heartbeat aceitam apenas seção genérica;
+        bye encerra a sessão. Sem acesso antes da autenticação. Uma nave por usuário,
+        expiração em 90 segundos, uso prioritário web.'
+      responses:
+        "101":
+          description: WebSocket; autenticação obrigatória no primeiro frame
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      summary: Presença temporária das naves (WebSocket)
+      tags:
+      - presence
+  /recover_password:
+    post:
+      consumes:
+      - application/json
+      description: Recover password by json user
+      parameters:
+      - description: Recover password
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/requests.RecoverPasswordInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      summary: Recover password
+      tags:
+      - users
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register public user by json
+      parameters:
+      - description: Register user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/requests.RegisterInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      summary: Register an user
+      tags:
+      - users
+  /sample_details_select:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve sample details for select inputs
+      parameters:
+      - description: Search by id or sample_string
+        in: query
+        name: search
+        type: string
+      - description: Limit the number of results
+        in: query
+        name: limit
+        type: integer
+      - description: Offset the results
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            items:
+              $ref: '#/definitions/models.ItemSelect'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Select sample details
+      tags:
+      - sample_details
+  /sample_models:
+    post:
+      consumes:
+      - application/json
+      description: Add by JSON. sample_double is required and accepts explicit zero;
+        omission or null is rejected. Legacy server defaults remain unchanged.
+      parameters:
+      - description: Add sample_model
+        in: body
+        name: sample_model
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateSampleModelInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SampleModel'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Add an sample_model
+      tags:
+      - sample_models
+  /sample_models/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete by sample_model ID
+      parameters:
+      - description: ID
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SampleModel'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Delete an sample_model
+      tags:
+      - sample_models
+    get:
+      consumes:
+      - application/json
+      description: Get sample_model
+      parameters:
+      - description: SampleModel ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.SampleModel'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Get sample_model
+      tags:
+      - sample_models
+    put:
+      consumes:
+      - application/json
+      description: sample_double is required and accepts explicit zero; omission or
+        null is rejected. Updates validated form fields. Omitted or null sample_nullable
+        preserves the current value; an explicit empty string clears it.
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update sample_model
+        in: body
+        name: sample_model
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateSampleModelInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SampleModel'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Update an sample_model
+      tags:
+      - sample_models
+  /sample_models/{id}/duplicate:
+    post:
+      consumes:
+      - application/json
+      description: Duplicate an existing sample.
+      parameters:
+      - description: Sample ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.SampleModel'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Duplicate Sample
+      tags:
+      - sample_models
+  /sample_models_select:
+    get:
+      consumes:
+      - application/json
+      description: Select samples
+      parameters:
+      - description: Search by sample_string
+        in: query
+        name: search
+        type: string
+      - description: Limit the number of results
+        in: query
+        name: limit
+        type: integer
+      - description: Offset the results
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            items:
+              $ref: '#/definitions/models.SampleModel'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Select samples
+      tags:
+      - sample_models
+  /samples:
+    get:
+      consumes:
+      - application/json
+      description: Get samples
+      parameters:
+      - description: Search by id or sample_string or sample_unique or sample_nullable
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            items:
+              $ref: '#/definitions/models.SampleModel'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Get samples
+      tags:
+      - sample_models
+  /samples/export:
+    get:
+      consumes:
+      - application/json
+      description: Export samples
+      parameters:
+      - description: Search by id or sample_string or sample_unique or sample_nullable
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: url
+          schema:
+            items:
+              $ref: '#/definitions/models.APIUrl'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Export samples
+      tags:
+      - sample_models
+  /sensor_readings:
+    get:
+      consumes:
+      - application/json
+      description: Get all sensor readings
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.SensorReading'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Get sensor readings
+      tags:
+      - sensor_readings
+  /sensor_readings/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a sensor reading by id
+      parameters:
+      - description: Sensor Reading ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SensorReading'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Delete sensor reading
+      tags:
+      - sensor_readings
+    get:
+      consumes:
+      - application/json
+      description: Get a sensor reading by id
+      parameters:
+      - description: Sensor Reading ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SensorReading'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Get sensor reading
+      tags:
+      - sensor_readings
+  /status:
+    get:
+      consumes:
+      - application/json
+      description: Get api status
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.APIStatus'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      summary: Get api status
+      tags:
+      - status
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users
+      parameters:
+      - description: Search by name or email
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Get all users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: add by json user
+      parameters:
+      - description: Add user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateUserInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Add an user
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete by user ID
+      parameters:
+      - description: ID
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Delete an user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Get user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Get user
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Updates a user. Omitted or null phone preserves its current value;
+        an explicit empty string clears it. An omitted or empty password preserves
+        the current password.
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateUserInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Update an user
+      tags:
+      - users
+  /users/{id}/update_fcm_token:
+    put:
+      consumes:
+      - application/json
+      description: Update by json user
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update user fcm token
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateUserFcmTokenInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Update an user fcm token
+      tags:
+      - users
+  /users_select:
+    get:
+      consumes:
+      - application/json
+      description: Select users
+      parameters:
+      - description: Search by name
+        in: query
+        name: search
+        type: string
+      - description: Limit the number of results
+        in: query
+        name: limit
+        type: integer
+      - description: Offset the results
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            items:
+              $ref: '#/definitions/models.SampleModel'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Select users
+      tags:
+      - users
+securityDefinitions:
+  Bearer:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

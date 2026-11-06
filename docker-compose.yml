@@ -1,0 +1,18 @@
+services:
+  unisinos_usp_api_go:
+    build:
+      dockerfile: ./docker/golang.Dockerfile
+      context: .
+      args:
+        APP_REVISION: ${APP_REVISION:-unknown}
+    image: ${API_IMAGE:-onlife-api:local}
+    restart: always
+    container_name: ${API_CONTAINER_NAME:-UnisinosUspAPI}
+    ports:
+      - "${APP_PORT}:8080"
+    volumes:
+      - ./storage:/app/src/unisinos_usp/storage
+      - ./.env:/app/src/unisinos_usp/.env:ro
+      - /var/lib/onlife-place-search:/var/lib/onlife-place-search
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

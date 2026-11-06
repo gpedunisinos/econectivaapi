@@ -1,0 +1,20 @@
+pipelines:
+  branches:
+    main:
+    - step:
+        name: Deploy Go Api - Uni Usp API
+        deployment: production
+        runs-on:
+          - "sshlinux"
+        script:
+          - |
+            if [ -n "${BITBUCKET_SSH_KEY_FILE:-}" ] && [ -r "$BITBUCKET_SSH_KEY_FILE" ]; then
+              ssh-keygen -lf "$BITBUCKET_SSH_KEY_FILE"
+            else
+              echo 'Arquivo BITBUCKET_SSH_KEY_FILE indisponível neste job.'
+            fi
+            ssh -vv -o BatchMode=yes -o StrictHostKeyChecking=no ubuntu@54.94.142.29 << 'EOF'
+              cd /var/www/unisinos_usp_api
+              git pull --ff-only origin main
+              python3 deploy/platform-split/deploy-api.py --platform onlife --build
+            EOF

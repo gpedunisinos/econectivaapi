@@ -1,0 +1,13 @@
+{
+  "status": "aprovado no escopo descrito",
+  "checks": {
+    "create_omitted_strength_defaults_one": true,
+    "omit_preserves_strength_and_evidence": true,
+    "null_preserves_strength_and_evidence": true,
+    "explicit_zero_and_empty_persisted": true,
+    "create_explicit_zero_persisted": true,
+    "own_links_and_type_cleaned": true,
+    "preexisting_clues_preserved": true
+  },
+  "production_mutated": false
+}

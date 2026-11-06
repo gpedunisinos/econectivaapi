@@ -1,0 +1,25 @@
+{
+  "status": "aprovado",
+  "cases": [
+    {
+      "phone_input": "omitted",
+      "passed": true,
+      "password_retained": true
+    },
+    {
+      "phone_input": "null",
+      "passed": true,
+      "password_retained": true
+    },
+    {
+      "phone_input": "empty",
+      "passed": true,
+      "password_retained": true
+    }
+  ],
+  "other_fields_preserved": true,
+  "search_name_and_email": true,
+  "cleanup_status": 404,
+  "database": "isolated onlife_validation_preview",
+  "production_changed": false
+}

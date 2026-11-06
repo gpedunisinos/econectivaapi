@@ -1,0 +1,213 @@
+package tests
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+
+	"github.com/OdairPianta/unisinos_usp_api/config"
+	"github.com/OdairPianta/unisinos_usp_api/enums"
+	"github.com/OdairPianta/unisinos_usp_api/models"
+	"github.com/OdairPianta/unisinos_usp_api/tests/factories"
+	"github.com/OdairPianta/unisinos_usp_api/tests/fakers"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestUserCreate(t *testing.T) {
+	setupDatabase()
+	router := routesSetup()
+	_, token := initUser()
+
+	model, err := factories.CreateUser()
+	assert.Nil(t, err)
+	model.Email = fakers.Email()
+
+	jsonModel, err := json.Marshal(model)
+	assert.Nil(t, err)
+
+	request, _ := http.NewRequest("POST", "/api/users", bytes.NewBuffer(jsonModel))
+	request.Header.Set("Authorization", "Bearer "+token)
+	recorder := httptest.NewRecorder()
+
+	router.ServeHTTP(recorder, request)
+
+	assert.Equal(t, http.StatusOK, recorder.Code, "OK response is expected")
+
+	var result map[string]string
+	_ = json.Unmarshal(recorder.Body.Bytes(), &result)
+	assert.NotNil(t, result, "response body must be a valid json")
+
+	assert.NotEmpty(t, result["token"], "token must be not empty")
+}
+
+func TestUserFind(t *testing.T) {
+	setupDatabase()
+	router := routesSetup()
+	_, token := initUser()
+
+	model, err := factories.CreateUser()
+	assert.Nil(t, err)
+
+	request, _ := http.NewRequest("GET", "/api/users/"+fmt.Sprint(model.ID), nil)
+	request.Header.Set("Authorization", "Bearer "+token)
+	recorder := httptest.NewRecorder()
+
+	router.ServeHTTP(recorder, request)
+
+	assert.Equal(t, http.StatusOK, recorder.Code, "OK response is expected")
+
+	var resultModel models.User
+	_ = json.Unmarshal(recorder.Body.Bytes(), &resultModel)
+	assert.NotNil(t, resultModel, "response body must be a valid json")
+}
+
+func TestUserFindOwnProfileAsRegularUser(t *testing.T) {
+	setupDatabase()
+	router := routesSetup()
+	user, token := initUserWithProfile(enums.UserProfileEnumUser)
+
+	request, _ := http.NewRequest("GET", "/api/users/"+fmt.Sprint(user.ID), nil)
+	request.Header.Set("Authorization", "Bearer "+token)
+	recorder := httptest.NewRecorder()
+
+	router.ServeHTTP(recorder, request)
+
+	assert.Equal(t, http.StatusOK, recorder.Code, "regular user should be able to load own profile")
+
+	var resultModel models.User
+	_ = json.Unmarshal(recorder.Body.Bytes(), &resultModel)
+	assert.Equal(t, user.ID, resultModel.ID)
+}
+
+func TestUserFindAnotherProfileAsRegularUserDenied(t *testing.T) {
+	setupDatabase()
+	router := routesSetup()
+	_, token := initUserWithProfile(enums.UserProfileEnumUser)
+
+	otherUser, err := factories.CreateUser()
+	assert.Nil(t, err)
+
+	request, _ := http.NewRequest("GET", "/api/users/"+fmt.Sprint(otherUser.ID), nil)
+	request.Header.Set("Authorization", "Bearer "+token)
+	recorder := httptest.NewRecorder()
+
+	router.ServeHTTP(recorder, request)
+
+	assert.Equal(t, http.StatusUnauthorized, recorder.Code, "regular user should not access another user profile")
+}
+
+func TestUserUpdatee(t *testing.T) {
+	setupDatabase()
+	router := routesSetup()
+	_, token := initUser()
+
+	model, err := factories.CreateUser()
+	assert.Nil(t, err)
+	model.Name = fakers.Name()
+
+	jsonModel, err := json.Marshal(model)
+	assert.Nil(t, err)
+
+	request, _ := http.NewRequest("PUT", "/api/users/"+fmt.Sprint(model.ID), bytes.NewBuffer(jsonModel))
+	request.Header.Set("Authorization", "Bearer "+token)
+	recorder := httptest.NewRecorder()
+
+	router.ServeHTTP(recorder, request)
+
+	assert.Equal(t, http.StatusOK, recorder.Code, "OK response is expected")
+
+	var resultModel models.User
+	_ = json.Unmarshal(recorder.Body.Bytes(), &resultModel)
+	assert.NotNil(t, resultModel, "response body must be a valid json")
+}
+
+func TestUserUpdateFcmToken(t *testing.T) {
+	setupDatabase()
+	router := routesSetup()
+	_, token := initUser()
+
+	model, err := factories.CreateUser()
+	assert.Nil(t, err)
+
+	body := []byte(`{"fcm_token": "new_fcm_token"}`)
+
+	request, _ := http.NewRequest("PUT", "/api/users/"+fmt.Sprint(model.ID)+"/update_fcm_token", bytes.NewBuffer(body))
+	request.Header.Set("Authorization", "Bearer "+token)
+	recorder := httptest.NewRecorder()
+
+	router.ServeHTTP(recorder, request)
+
+	assert.Equal(t, http.StatusOK, recorder.Code, "OK response is expected")
+
+	var resultModel models.User
+	_ = json.Unmarshal(recorder.Body.Bytes(), &resultModel)
+	assert.NotNil(t, resultModel, "response body must be a valid json")
+	//assert fcm token is equal new_fcm_token
+	assert.Equal(t, "new_fcm_token", resultModel.FCMToken, "fcm token must be equal new_fcm_token")
+}
+
+func TestUserDelete(t *testing.T) {
+	setupDatabase()
+	router := routesSetup()
+	_, token := initUser()
+
+	model, err := factories.CreateUser()
+	assert.Nil(t, err)
+
+	request, _ := http.NewRequest("DELETE", "/api/users/"+fmt.Sprint(model.ID), nil)
+	request.Header.Set("Authorization", "Bearer "+token)
+	recorder := httptest.NewRecorder()
+
+	router.ServeHTTP(recorder, request)
+
+	assert.Equal(t, http.StatusOK, recorder.Code, "OK response is expected")
+
+	var resultModel models.User
+	_ = json.Unmarshal(recorder.Body.Bytes(), &resultModel)
+	assert.NotNil(t, resultModel, "response body must be a valid json")
+}
+
+func TestExplorerCanDeleteOnlyOwnAccount(t *testing.T) {
+	setupDatabase()
+	router := routesSetup()
+	user, auth := initUserWithProfile(enums.UserProfileEnumUser)
+	other, _ := initUserWithProfile(enums.UserProfileEnumUser)
+	mode := "explorer"
+	user.UsageMode = &mode
+	assert.NoError(t, config.DB.Model(&user).Update("usage_mode", mode).Error)
+
+	request := func(id uint) *httptest.ResponseRecorder {
+		req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/api/users/%d", id), nil)
+		req.Header.Set("Authorization", "Bearer "+auth)
+		recorder := httptest.NewRecorder()
+		router.ServeHTTP(recorder, req)
+		return recorder
+	}
+	assert.Equal(t, http.StatusForbidden, request(other.ID).Code)
+	assert.Equal(t, http.StatusOK, request(user.ID).Code)
+}
+
+func TestUserSelect(t *testing.T) {
+	setupDatabase()
+	router := routesSetup()
+	_, token := initUser()
+
+	model, err := factories.CreateUser()
+	assert.Nil(t, err)
+
+	request, _ := http.NewRequest("GET", fmt.Sprintf("/api/users_select?search=%s", model.Name), nil)
+	request.Header.Set("Authorization", "Bearer "+token)
+	recorder := httptest.NewRecorder()
+
+	router.ServeHTTP(recorder, request)
+
+	assert.Equal(t, http.StatusOK, recorder.Code, "Returned body: "+recorder.Body.String())
+	var result []models.ItemSelect
+	err = json.Unmarshal(recorder.Body.Bytes(), &result)
+	assert.Nil(t, err, "Returned body: "+recorder.Body.String())
+	assert.Greater(t, len(result), 0, "Returned body: "+recorder.Body.String())
+}

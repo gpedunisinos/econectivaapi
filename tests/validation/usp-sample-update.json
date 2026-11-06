@@ -1,0 +1,21 @@
+{
+  "status": "aprovado",
+  "cases": [
+    {
+      "case": "omitted",
+      "passed": true
+    },
+    {
+      "case": "null",
+      "passed": true
+    },
+    {
+      "case": "empty",
+      "passed": true
+    }
+  ],
+  "other_form_fields_preserved": true,
+  "cleanup_status": 404,
+  "database": "isolated onlife_validation_preview",
+  "production_changed": false
+}
