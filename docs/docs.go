@@ -1100,6 +1100,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/integrations/cdig": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Integrações"
+                ],
+                "summary": "Configuração pública da integração CDIG",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/link_previews": {
             "get": {
                 "security": [

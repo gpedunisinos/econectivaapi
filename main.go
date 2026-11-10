@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"github.com/OdairPianta/unisinos_usp_api/config"
+	"github.com/OdairPianta/unisinos_usp_api/integrations/cdig"
 	"github.com/OdairPianta/unisinos_usp_api/jobs"
 	"github.com/OdairPianta/unisinos_usp_api/routes"
 	"github.com/OdairPianta/unisinos_usp_api/services"
@@ -32,6 +34,7 @@ func main() {
 		panic("Failed to setup logging: " + err.Error())
 	}
 	config.InitDatabase()
+	cdig.Start(context.Background(), config.DB)
 	go jobs.StartClient()
 	services.InitSentry()
 	routes.HandleRequest()
