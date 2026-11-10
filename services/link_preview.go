@@ -6,6 +6,7 @@ import (
 	"github.com/OdairPianta/unisinos_usp_api/config"
 	"github.com/OdairPianta/unisinos_usp_api/models"
 	"golang.org/x/net/html"
+	"golang.org/x/net/html/charset"
 	"gorm.io/gorm/clause"
 	"io"
 	"net"
@@ -94,7 +95,7 @@ func GetPublicLinkPreview(ctx context.Context, raw string) (*models.LinkPreview,
 	if res.StatusCode != 200 || !strings.Contains(res.Header.Get("Content-Type"), "text/html") {
 		return nil, errors.New("metadata unavailable")
 	}
-	doc, err := html.Parse(io.LimitReader(res.Body, 1024*1024))
+	doc, err := parsePreviewDocument(res.Body, res.Header.Get("Content-Type"))
 	if err != nil {
 		return nil, err
 	}
@@ -136,4 +137,14 @@ func GetPublicLinkPreview(ctx context.Context, raw string) (*models.LinkPreview,
 		_ = config.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&preview).Error
 	}
 	return &preview, nil
+}
+
+// External pages can still use ISO-8859-1/Windows-1252. Decode their declared
+// encoding before extracting text so imported references keep their accents.
+func parsePreviewDocument(body io.Reader, contentType string) (*html.Node, error) {
+	reader, err := charset.NewReader(io.LimitReader(body, 1024*1024), contentType)
+	if err != nil {
+		return nil, err
+	}
+	return html.Parse(reader)
 }
