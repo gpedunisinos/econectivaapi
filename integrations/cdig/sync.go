@@ -9,6 +9,7 @@ import (
 	"github.com/OdairPianta/unisinos_usp_api/models"
 	"github.com/OdairPianta/unisinos_usp_api/repository"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type Action struct {
@@ -57,7 +58,11 @@ func (s *Sync) Run(ctx context.Context, dry bool) (report Report, err error) {
 		if e := db.Raw("SELECT GET_LOCK(?, 0)", key).Scan(&acquired).Error; e != nil || acquired != 1 {
 			return errors.New("CDIG synchronization is already running or lock is unavailable")
 		}
-		defer db.Exec("SELECT RELEASE_LOCK(?)", key)
+		defer func() {
+			releaseCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+			db.WithContext(releaseCtx).Exec("SELECT RELEASE_LOCK(?)", key)
+		}()
 		if !dry {
 			if e := db.AutoMigrate(&models.CDIGMapping{}, &models.CDIGMembership{}); e != nil {
 				return errors.New("CDIG tracking migration failed")
@@ -101,7 +106,11 @@ func (s *Sync) apply(tx *gorm.DB, items []Item, dry bool, report *Report) error 
 		return errors.New("CDIG import user does not exist")
 	}
 	var clues []models.LivingClue
-	if err := tx.Unscoped().Find(&clues).Error; err != nil {
+	clueQuery := tx.Unscoped()
+	if !dry {
+		clueQuery = clueQuery.Clauses(clause.Locking{Strength: "UPDATE"})
+	}
+	if err := clueQuery.Find(&clues).Error; err != nil {
 		return err
 	}
 	var mappings []models.CDIGMapping
