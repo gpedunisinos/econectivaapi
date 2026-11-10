@@ -174,3 +174,8 @@ func syncCluePreviewReferences(tx *gorm.DB, id uint, clue *models.LivingClue) er
 	}
 	return nil
 }
+
+// SyncImportedCluePreviews updates only the local preview-reference index.
+func SyncImportedCluePreviews(tx *gorm.DB, clue *models.LivingClue) error {
+	return syncCluePreviewReferences(tx, clue.ID, clue)
+}

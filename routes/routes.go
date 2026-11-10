@@ -35,6 +35,7 @@ func InitRoutes(r *gin.Engine) *gin.Engine {
 	public := r.Group("/api")
 	RegisteSwaggerRoutes(public)
 	RegisterStatusRoutes(public)
+	public.GET("/integrations/cdig", controllers.CDIGIntegrationStatus)
 	public.GET("/presence", controllers.OpenPresence)
 	RegisterLogRoutes(public)
 	RegisterAuthRoutes(public)

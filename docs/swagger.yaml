@@ -1864,6 +1864,19 @@ paths:
       summary: Forgot password
       tags:
       - users
+  /integrations/cdig:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Configuração pública da integração CDIG
+      tags:
+      - Integrações
   /link_previews:
     get:
       parameters:
