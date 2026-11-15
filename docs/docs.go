@@ -205,6 +205,140 @@ const docTemplate = `{
                 }
             }
         },
+        "/biodiversity/nearby": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Up to 12 species from a sample of 200 recent iNaturalist observations with licensed photos. Public, possibly approximate coordinates only; no clue is created.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "biodiversity"
+                ],
+                "summary": "Fauna observada no entorno",
+                "parameters": [
+                    {
+                        "type": "number",
+                        "description": "Latitude",
+                        "name": "latitude",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Longitude",
+                        "name": "longitude",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            500,
+                            1000,
+                            5000
+                        ],
+                        "type": "integer",
+                        "default": 1000,
+                        "description": "Radius in meters",
+                        "name": "radius_m",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.APIMessage"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/models.APIMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/biodiversity/observations": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Up to 100 recent observations; each axis must span at most 3 degrees.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "biodiversity"
+                ],
+                "summary": "Public fauna observations in the map viewport",
+                "parameters": [
+                    {
+                        "type": "number",
+                        "description": "North",
+                        "name": "north",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "South",
+                        "name": "south",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "East",
+                        "name": "east",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "West",
+                        "name": "west",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.APIMessage"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/models.APIMessage"
+                        }
+                    }
+                }
+            }
+        },
         "/chat_templates": {
             "get": {
                 "security": [

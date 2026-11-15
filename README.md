@@ -121,3 +121,5 @@ Logos de origem institucional: [FAPERGS](https://fapergs.rs.gov.br/identidade-vi
 ## Licença
 
 Consulte a [licença Apache 2.0](LICENSE). Os nomes e logos institucionais pertencem às respectivas instituições e não são abrangidos pela licença do código.
+
+- [Fauna observada no entorno — integração iNaturalist](docs/biodiversity.md)
