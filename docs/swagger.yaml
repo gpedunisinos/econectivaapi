@@ -1276,6 +1276,97 @@ paths:
       summary: Transcrever gravação da conversa com a IAraeté
       tags:
       - ai_messages
+  /biodiversity/nearby:
+    get:
+      description: Up to 12 species from a sample of 200 recent iNaturalist observations
+        with licensed photos. Public, possibly approximate coordinates only; no clue
+        is created.
+      parameters:
+      - description: Latitude
+        in: query
+        name: latitude
+        required: true
+        type: number
+      - description: Longitude
+        in: query
+        name: longitude
+        required: true
+        type: number
+      - default: 1000
+        description: Radius in meters
+        enum:
+        - 500
+        - 1000
+        - 5000
+        in: query
+        name: radius_m
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Fauna observada no entorno
+      tags:
+      - biodiversity
+  /biodiversity/observations:
+    get:
+      description: Up to 100 recent observations; each axis must span at most 3 degrees.
+      parameters:
+      - description: North
+        in: query
+        name: north
+        required: true
+        type: number
+      - description: South
+        in: query
+        name: south
+        required: true
+        type: number
+      - description: East
+        in: query
+        name: east
+        required: true
+        type: number
+      - description: West
+        in: query
+        name: west
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Public fauna observations in the map viewport
+      tags:
+      - biodiversity
   /chat_templates:
     get:
       consumes:
