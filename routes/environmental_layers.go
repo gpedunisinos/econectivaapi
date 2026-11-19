@@ -6,6 +6,7 @@ import (
 )
 
 func RegisterEnvironmentalLayerRoutes(router *gin.RouterGroup) {
+	router.GET("/deter/nearby", controllers.FindNearbyDeter)
 	router.GET("/biodiversity/nearby", controllers.FindNearbyFauna)
 	router.GET("/biodiversity/observations", controllers.FindFaunaObservations)
 	router.GET("/environmental_layers", controllers.FindEnvironmentalLayers)

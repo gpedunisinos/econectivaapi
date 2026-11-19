@@ -833,6 +833,72 @@
                 }
             }
         },
+        "/deter/nearby": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Snapshot local dos últimos 365 dias. Inclui cobertura, período e data de sincronização. Não equivale à taxa PRODES.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "environmental"
+                ],
+                "summary": "Avisos DETER Amazônia no entorno da pista",
+                "parameters": [
+                    {
+                        "type": "number",
+                        "description": "Latitude",
+                        "name": "latitude",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Longitude",
+                        "name": "longitude",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            500,
+                            1000,
+                            5000
+                        ],
+                        "type": "integer",
+                        "default": 1000,
+                        "description": "Raio em metros",
+                        "name": "radius_m",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.APIMessage"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/models.APIMessage"
+                        }
+                    }
+                }
+            }
+        },
         "/environmental_layers": {
             "get": {
                 "description": "Returns available environmental layers, styles, sources and legends",

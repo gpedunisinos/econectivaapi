@@ -1691,6 +1691,51 @@ paths:
       summary: Update a clue connection
       tags:
       - clue_connections
+  /deter/nearby:
+    get:
+      description: Snapshot local dos últimos 365 dias. Inclui cobertura, período
+        e data de sincronização. Não equivale à taxa PRODES.
+      parameters:
+      - description: Latitude
+        in: query
+        name: latitude
+        required: true
+        type: number
+      - description: Longitude
+        in: query
+        name: longitude
+        required: true
+        type: number
+      - default: 1000
+        description: Raio em metros
+        enum:
+        - 500
+        - 1000
+        - 5000
+        in: query
+        name: radius_m
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/models.APIMessage'
+      security:
+      - Bearer: []
+      summary: Avisos DETER Amazônia no entorno da pista
+      tags:
+      - environmental
   /environmental_layers:
     get:
       description: Returns available environmental layers, styles, sources and legends
